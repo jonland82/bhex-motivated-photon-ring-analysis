@@ -1,0 +1,596 @@
+\documentclass[10pt,letterpaper,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[top=0.76in,bottom=0.82in,left=0.72in,right=0.72in,columnsep=0.23in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+\setstretch{0.995}
+\setlength{\parindent}{0.9em}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{0.23in}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.2em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.3em,itemsep=0.2em,topsep=0.35em}
+\setlength{\abovedisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\belowdisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{7pt plus 2pt minus 2pt}
+\setlength{\intextsep}{7pt plus 2pt minus 2pt}
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom
+
+\definecolor{TitleRule}{HTML}{D9DEE7}
+\definecolor{TitleNote}{HTML}{4B5563}
+\definecolor{HeadingInk}{HTML}{1F2937}
+\definecolor{HeadingRule}{HTML}{CBD5E1}
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\setcounter{secnumdepth}{2}
+
+\titleformat{\section}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {\thesection}
+  {0.65em}
+  {}
+\titleformat{name=\section,numberless}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {}
+  {0pt}
+  {}
+\titleformat{\subsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsection}
+  {0.55em}
+  {}
+\titleformat{\subsubsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsubsection}
+  {0.5em}
+  {}
+\titlespacing*{\section}{0pt}{0.95em}{0.35em}
+\titlespacing*{\subsection}{0pt}{0.75em}{0.25em}
+\titlespacing*{\subsubsection}{0pt}{0.55em}{0.2em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\title{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference}
+\author{Jonathan R. Landers}
+\date{}
+
+\newcommand{\affiliationnote}{Independent researcher; not affiliated
+with the BHEX collaboration or mission team.}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \twocolumn[{%
+    \begin{@twocolumnfalse}
+      \vspace*{-1.3em}
+      {\LARGE\sffamily\bfseries\raggedright \@title \par}
+      \vspace{0.35em}
+      {\normalsize\sffamily\raggedright \@author \par}
+      \vspace{0.16em}
+      {\small\color{TitleNote}\raggedright \affiliationnote \par}
+      \vspace{0.65em}
+      {\color{TitleRule}\hrule height 0.8pt}
+      \vspace{0.8em}
+    \end{@twocolumnfalse}
+  }]
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+In recent work proposing the \textbf{Black Hole Explorer (BHEX)}
+mission, the BHEX authors argue that sufficiently long-baseline
+interferometric measurements can reveal, and in favorable regimes help isolate, the universal photon-ring
+signature of a black hole from the more complicated emission of the
+surrounding plasma [\hyperlink{ref-1}{1}, \hyperlink{ref-2}{2}]. In
+practice, the measured visibility data contain both contributions, and
+the observational challenge is to determine whether a structured
+photon-ring signal can be reliably extracted from the mixture using
+long-baseline amplitude signatures or more explicit structured
+source-separation methods. This note develops one possible mathematical extension of
+that problem framing, inspired by the BHEX visibility program.
+
+The natural story is two-stage. First, one can ask how far a simple
+long-baseline ring-oriented heuristic can be pushed before structured
+plasma leakage creates bias. Second, one can ask whether that same
+regime is still recoverable once the inverse problem is posed more
+explicitly. The first question leads to a mismatch bound between a
+direct amplitude-readout heuristic and a plasma-aware estimator. The
+second leads to a recoverability statement: the direct amplitude readout
+can lose clarity before ring non-recoverability is reached.
+
+\hypertarget{a-first-comparison-template-mismatch-versus-plasma-aware-projection}{%
+\section{A first comparison: template mismatch versus plasma-aware
+projection}\label{a-first-comparison-template-mismatch-versus-plasma-aware-projection}}
+
+\par\smallskip\noindent{}\textbf{Lemma (Mismatch between heuristic ring
+detection and structured plasma-aware separation).} Let
+\(y \in \mathcal H\) be observed visibility data in a complex Hilbert
+space, decomposed as
+
+\[
+y = \alpha g + p + \varepsilon,
+\]
+
+where \(g \in \mathcal H\) is a photon-ring template,
+\(\alpha \in \mathbb C\) is the ring amplitude,
+\(p \in \mathcal P \subset \mathcal H\) is a plasma component lying in a
+plasma subspace \(\mathcal P\), and \(\varepsilon \in \mathcal H\) is
+noise. Define the heuristic estimator
+
+\[
+\hat\alpha_{\mathrm{heur}} = \frac{\langle y,g\rangle}{\|g\|^2},
+\]
+
+and the plasma-aware estimator
+
+\[
+\hat\alpha_{\mathrm{model}}
+=
+\frac{\left\langle (I-\Pi_{\mathcal P})y,\; (I-\Pi_{\mathcal P})g\right\rangle}
+{\|(I-\Pi_{\mathcal P})g\|^2},
+\]
+
+where \(\Pi_{\mathcal P}\) denotes the orthogonal projector onto
+\(\mathcal P\). Then
+
+\[
+\bigl|\hat\alpha_{\mathrm{heur}}-\hat\alpha_{\mathrm{model}}\bigr|
+\le
+\mu(g,\mathcal P)\frac{\|p\|}{\|g\|}
++
+\frac{\|\varepsilon\|}{\|g\|}
++
+\frac{\|(I-\Pi_{\mathcal P})\varepsilon\|}{\|(I-\Pi_{\mathcal P})g\|},
+\]
+
+where
+
+\[
+\mu(g,\mathcal P)=\frac{\|\Pi_{\mathcal P}g\|}{\|g\|}
+\]
+
+is the ring-plasma coherence.
+
+\par\smallskip\noindent{}\textbf{Proof.} First, by direct substitution,
+
+\[
+\hat\alpha_{\mathrm{heur}}
+=
+\frac{\langle \alpha g + p + \varepsilon,\; g\rangle}{\|g\|^2}
+=
+\alpha
++
+\frac{\langle p,g\rangle}{\|g\|^2}
++
+\frac{\langle \varepsilon,g\rangle}{\|g\|^2}.
+\]
+
+Hence
+
+\[
+\hat\alpha_{\mathrm{heur}}-\alpha
+=
+\frac{\langle p,g\rangle}{\|g\|^2}
++
+\frac{\langle \varepsilon,g\rangle}{\|g\|^2}.
+\]
+
+Now define
+
+\[
+g_\perp = (I-\Pi_{\mathcal P})g.
+\]
+
+Since \(p \in \mathcal P\), we have
+
+\[
+(I-\Pi_{\mathcal P})p = 0.
+\]
+
+Therefore
+
+\[
+(I-\Pi_{\mathcal P})y
+=
+\alpha (I-\Pi_{\mathcal P})g + (I-\Pi_{\mathcal P})\varepsilon
+=
+\alpha g_\perp + (I-\Pi_{\mathcal P})\varepsilon.
+\]
+
+Substituting into the plasma-aware estimator gives
+
+\[
+\hat\alpha_{\mathrm{model}}
+=
+\frac{\langle \alpha g_\perp + (I-\Pi_{\mathcal P})\varepsilon,\; g_\perp\rangle}{\|g_\perp\|^2}
+=
+\alpha
++
+\frac{\langle (I-\Pi_{\mathcal P})\varepsilon,\; g_\perp\rangle}{\|g_\perp\|^2}.
+\]
+
+So
+
+\[
+\hat\alpha_{\mathrm{model}}-\alpha
+=
+\frac{\langle (I-\Pi_{\mathcal P})\varepsilon,\; g_\perp\rangle}{\|g_\perp\|^2}.
+\]
+
+Subtracting the two estimators yields
+
+\[
+\hat\alpha_{\mathrm{heur}}-\hat\alpha_{\mathrm{model}}
+=
+\frac{\langle p,g\rangle}{\|g\|^2}
++
+\frac{\langle \varepsilon,g\rangle}{\|g\|^2}
+-
+\frac{\langle (I-\Pi_{\mathcal P})\varepsilon,\; g_\perp\rangle}{\|g_\perp\|^2}.
+\]
+
+Applying the triangle inequality,
+
+\[
+\bigl|\hat\alpha_{\mathrm{heur}}-\hat\alpha_{\mathrm{model}}\bigr|
+\le
+\frac{|\langle p,g\rangle|}{\|g\|^2}
++
+\frac{|\langle \varepsilon,g\rangle|}{\|g\|^2}
++
+\frac{|\langle (I-\Pi_{\mathcal P})\varepsilon,\; g_\perp\rangle|}{\|g_\perp\|^2}.
+\]
+
+Using Cauchy--Schwarz on the last two terms,
+
+\[
+\frac{|\langle \varepsilon,g\rangle|}{\|g\|^2}
+\le
+\frac{\|\varepsilon\|\,\|g\|}{\|g\|^2}
+=
+\frac{\|\varepsilon\|}{\|g\|},
+\]
+
+and
+
+\[
+\frac{|\langle (I-\Pi_{\mathcal P})\varepsilon,\; g_\perp\rangle|}{\|g_\perp\|^2}
+\le
+\frac{\|(I-\Pi_{\mathcal P})\varepsilon\|\,\|g_\perp\|}{\|g_\perp\|^2}
+=
+\frac{\|(I-\Pi_{\mathcal P})\varepsilon\|}{\|g_\perp\|}.
+\]
+
+It remains to bound the plasma term. Since \(p \in \mathcal P\),
+
+\[
+\langle p,g\rangle = \langle p,\Pi_{\mathcal P}g\rangle,
+\]
+
+so again by Cauchy--Schwarz,
+
+\[
+|\langle p,g\rangle|
+=
+|\langle p,\Pi_{\mathcal P}g\rangle|
+\le
+\|p\|\,\|\Pi_{\mathcal P}g\|.
+\]
+
+Thus
+
+\[
+\frac{|\langle p,g\rangle|}{\|g\|^2}
+\le
+\frac{\|p\|\,\|\Pi_{\mathcal P}g\|}{\|g\|^2}
+=
+\left(\frac{\|\Pi_{\mathcal P}g\|}{\|g\|}\right)\frac{\|p\|}{\|g\|}
+=
+\mu(g,\mathcal P)\frac{\|p\|}{\|g\|}.
+\]
+
+Combining the three bounds gives
+
+\[
+\bigl|\hat\alpha_{\mathrm{heur}}-\hat\alpha_{\mathrm{model}}\bigr|
+\le
+\mu(g,\mathcal P)\frac{\|p\|}{\|g\|}
++
+\frac{\|\varepsilon\|}{\|g\|}
++
+\frac{\|(I-\Pi_{\mathcal P})\varepsilon\|}{\|(I-\Pi_{\mathcal P})g\|}.
+\]
+
+This proves the claim. \(\square\)
+
+\par\smallskip\noindent{}\textbf{Interpretation.} This lemma makes
+precise the gap between a template-based long-baseline heuristic and a
+plasma-aware structured estimator in the same general spirit as the BHEX
+visibility-analysis program [\hyperlink{ref-2}{2}]. The mismatch is
+controlled by three interpretable quantities: ring-plasma coherence,
+plasma magnitude, and measurement noise. The more the photon-ring
+template overlaps realistic plasma structure, the more the heuristic
+estimator can be biased relative to a structured projection.
+
+\hypertarget{from-mismatch-to-recoverability}{%
+\section{From mismatch to
+recoverability}\label{from-mismatch-to-recoverability}}
+
+The previous lemma quantifies the discrepancy between two estimators,
+but it does not yet answer the more interesting question: if the direct
+amplitude readout becomes hard to interpret, does recoverability
+necessarily disappear with it? The next proposition formalizes the
+stricter and more useful claim that the answer can be no. In other
+words, the heuristic readability limit can arrive before the
+source-separation limit.
+
+\par\smallskip\noindent{}\textbf{Proposition (direct-readout limit
+before separation limit).} Let the observed visibility be
+
+\[
+y=\alpha g_\theta + q + \varepsilon,
+\]
+
+in a Hilbert space \(\mathcal H\), where:
+
+\begin{itemize}
+\tightlist
+\item
+  \(g_\theta \in \mathcal G\) is the photon-ring visibility family,
+  parameterized by ring shape \(\theta\),
+\item
+  \(\alpha \in \mathbb C\) is the ring amplitude,
+\item
+  \(q \in \mathcal Q\) is a structured nuisance term representing
+  plasma, finite-width \(n=1\) distortion, scattering, or averaging
+  artifacts,
+\item
+  \(\varepsilon\) is noise.
+\end{itemize}
+
+Assume, as a simplified abstraction motivated by the BHEX visibility
+program, that a long-baseline amplitude heuristic estimates \(\theta\) from
+the oscillatory structure of the \textbf{visibility amplitude} \(|y|\)
+[\hyperlink{ref-2}{2}]. Assume also that a structured estimator is given
+by
+
+\[
+(\hat\alpha,\hat\theta,\hat q)
+\in
+\arg\min_{\alpha,\theta,q\in\mathcal Q}
+\|y-\alpha g_\theta-q\|_{\mathcal H}^2+\lambda R(q),
+\]
+
+where \(R\) encodes nuisance structure. Finally, assume a local
+identifiability condition: for some \(c>0\),
+
+\[
+\|\alpha g_\theta + q - \alpha' g_{\theta'} - q'\|_{\mathcal H}
+\ge
+c\Big(|\alpha-\alpha'| + d(\theta,\theta') + \|q-q'\|_{\mathcal H}\Big)
+\]
+
+for all nearby triples \((\alpha,\theta,q)\) and
+\((\alpha',\theta',q')\).
+
+Then there exists a nonempty regime in which the amplitude-based
+heuristic becomes biased or visually unstable, but the structured
+estimator still recovers \(\theta\) stably.
+
+\par\smallskip\noindent{}\textbf{Proof.} Write
+
+\[
+y=\alpha g_\theta + r,
+\qquad r:=q+\varepsilon.
+\]
+
+The heuristic extracts \(\theta\) from extrema or oscillation spacing of
+\(|y|\) on long baselines. It is therefore accurate only when
+
+\[
+|y|=|\alpha g_\theta+r|
+\]
+
+has nearly the same oscillatory pattern as \(|\alpha g_\theta|\). But
+modulus is nonlinear, so even moderate perturbations can shift extrema
+and spacing. Pointwise,
+
+\[
+\bigl||\alpha g_\theta+r|-|\alpha g_\theta|\bigr|
+\le |r|,
+\]
+
+yet small amplitude perturbation does \textbf{not} imply small
+perturbation of extrema locations. Near a shallow oscillation peak, an
+\(O(\delta)\) perturbation can induce an \(O(\delta/\kappa)\)
+peak-location error, where \(\kappa\) denotes local curvature. Thus the
+heuristic can lose direct-readout accuracy once structured contamination
+distorts the oscillatory pattern, even if the ring signal is still
+present.
+
+By contrast, the structured estimator fits the full model
+\(y=\alpha g_\theta+q+\varepsilon\). Under the identifiability
+inequality, standard stability of constrained least squares implies that
+if \(\|\varepsilon\|_{\mathcal H}\le \eta\), then
+
+\[
+|\hat\alpha-\alpha| + d(\hat\theta,\theta) + \|\hat q-q\|_{\mathcal H}
+\le \frac{C}{c}\,\eta
+\]
+
+for some constant \(C\), since any competing triple separated from the
+truth by more than \(O(\eta)\) would violate the lower bound and
+increase the residual.
+
+Therefore there is a regime where:
+
+\begin{itemize}
+\tightlist
+\item
+  the nuisance \(q\) is large enough to distort the amplitude
+  oscillation and make direct peak-reading unreliable,
+\item
+  but still small enough, and sufficiently structured, that the full
+  inverse problem remains identifiable and stable.
+\end{itemize}
+
+Hence
+
+\[
+\begin{aligned}
+\{\text{cleanly amplitude-readable}\}
+&\subsetneq \{\text{structured-separation recoverable}\}
+\end{aligned}
+\]
+
+is possible. \(\square\)
+
+\par\smallskip\noindent{}\textbf{One-line interpretation.} The BHEX
+heuristic is especially powerful when the ring is \textbf{cleanly
+readable} in amplitude space [\hyperlink{ref-2}{2}]; the structured
+estimator succeeds under the weaker condition that the ring remains
+\textbf{identifiable} after joint modeling of structured contamination.
+
+\hypertarget{physical-picture}{%
+\section{Physical picture}\label{physical-picture}}
+
+At the image level, the distinction is intuitive. The observed
+black-hole image is typically dominated by a \textbf{broader plasma
+emission ring or crescent}, produced by synchrotron emission from hot
+plasma, while the \textbf{photon ring} is a much thinner structure at
+nearly the same diameter, set more directly by strong lensing geometry
+[\hyperlink{ref-2}{2}, \hyperlink{ref-3}{3}]. This means the source
+naturally presents a broad, bright, plasma-dominated feature, while the
+measurement goal is to isolate a much thinner, more universal ring
+hidden within or beneath it. In Fourier space, that geometric difference
+becomes a problem of structured overlap: broad plasma emission and thin
+photon-ring oscillations can coexist on the same visibility domain, but
+need not be equally identifiable.
+
+This is exactly why the source-separation perspective is useful as an
+extension alongside the BHEX program. The heuristic says: go where the
+photon ring should show itself most directly. The structured method
+says: even if that regime is not perfectly clean, the ring may still be
+recoverable provided its structure remains distinguishable from the
+nuisance family.
+
+\hypertarget{connection-to-noise}{%
+\section{Connection to noise}\label{connection-to-noise}}
+
+The first lemma separates the mismatch into a \textbf{plasma leakage
+term} and two \textbf{noise terms}. The first noise term,
+\(\|\varepsilon\|/\|g\|\), is the raw sensitivity of the heuristic
+estimator to measurement noise, while the second,
+
+\[
+\frac{\|(I-\Pi_{\mathcal P})\varepsilon\|}{\|(I-\Pi_{\mathcal P})g\|},
+\]
+
+shows that the structured method is governed by the component of the
+noise that survives plasma projection, normalized by the strength of the
+projected ring template. Thus the plasma-aware method reduces bias from
+source confusion, but its advantage is greatest when the projected ring
+signal remains sufficiently strong relative to the projected noise.
+
+The proposition sharpens this picture. Noise and nuisance structure do
+not merely degrade the signal-to-noise ratio; they can deform the
+oscillatory pattern used by the heuristic before they destroy
+identifiability altogether. This is the conceptual gap between a direct
+long-baseline readout strategy and a more robust inverse-problem
+formulation.
+
+\hypertarget{astrophysical-relevance}{%
+\section{Astrophysical relevance}\label{astrophysical-relevance}}
+
+The mathematical content becomes most compelling when the abstract
+nuisance class is tied to realistic plasma and propagation effects. A
+natural next step is therefore to estimate either the ring-plasma
+coherence \(\mu(g,\mathcal P)\) or a more general identifiability margin
+for nuisance classes informed by GRMHD simulations, radiative transfer
+calculations, scattering models, or empirical variability constraints
+[\hyperlink{ref-2}{2}, \hyperlink{ref-3}{3}]. Such a result would
+connect the abstract bounds directly to the astrophysical conditions
+under which long-baseline photon-ring detection is expected to succeed,
+become biased, or remain recoverable only through structured separation.
+
+In that sense, the BHEX heuristic can be viewed as an elegant front-end
+to the inference problem: it targets the regime where the photon ring
+more or less announces itself [\hyperlink{ref-2}{2}]. The
+source-separation formalism is a complementary robustness layer: it
+targets the broader regime in which the data are less cleanly readable,
+but the ring still leaves enough structured trace to be recovered.
+
+\hypertarget{key-interesting-points}{%
+\section{Key interesting points}\label{key-interesting-points}}
+
+\begin{itemize}
+\tightlist
+\item
+  The writeup develops a
+  \textbf{structured source-separation abstraction in Fourier space}
+  inspired by BHEX photon-ring inference [\hyperlink{ref-1}{1}, \hyperlink{ref-2}{2}].
+\item
+  The first lemma gives a \textbf{clean mismatch bound} between a direct
+  amplitude-readout heuristic and a plasma-aware estimator, controlled
+  by ring-plasma coherence, plasma magnitude, and noise.
+\item
+  The new proposition makes the stronger point that the
+  \textbf{heuristic readability limit can occur before the
+  recoverability limit} in this abstraction, provided the ring remains identifiable under
+  joint modeling.
+\item
+  The physical picture is that the image naturally shows a \textbf{broad
+  plasma ring or crescent}, while the scientific target is a
+  \textbf{much thinner photon ring} at nearly the same diameter
+  [\hyperlink{ref-2}{2}, \hyperlink{ref-3}{3}].
+\item
+  The most promising bridge to astrophysics is to estimate coherence or
+  identifiability margins for \textbf{GRMHD-informed nuisance classes},
+  linking this abstract theory to real mission regimes anticipated by
+  BHEX forecast work [\hyperlink{ref-2}{2}, \hyperlink{ref-3}{3}].
+\end{itemize}
+
+\hypertarget{references}{%
+\section*{References}\label{references}}
+\addcontentsline{toc}{section}{References}
+
+\noindent{}\hypertarget{ref-1}{}{[}1{]} Black Hole Explorer
+Collaboration, \emph{Black Hole Explorer: Motivation and Vision},
+arXiv:2406.12917. https://arxiv.org/abs/2406.12917
+
+\noindent{}\hypertarget{ref-2}{}{[}2{]} Black Hole Explorer
+Collaboration, \emph{The Black Hole Explorer: Photon Ring Science, Detection and Shape Measurement}, arXiv:2406.09498. https://arxiv.org/abs/2406.09498
+
+\noindent{}\hypertarget{ref-3}{}{[}3{]} Black Hole Explorer
+Collaboration, \emph{Interferometric Inference of Black Hole Spin from
+Photon Ring Size and Brightness}, arXiv:2509.23628.
+https://arxiv.org/abs/2509.23628
+
+\end{document}
