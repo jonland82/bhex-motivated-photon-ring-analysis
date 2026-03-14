@@ -96,7 +96,7 @@
     p { margin: 0 0 14px; }
     .muted { color: var(--muted); }
     .two-col { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 24px; align-items: start; }
-    #prototype .two-col { grid-template-columns: 1.08fr 0.92fr; gap: 20px; align-items: start; }
+    .prototype-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: 20px; align-items: start; }
     .panel { padding: clamp(18px, 3.8vw, 22px); }
     .equation-panel p.math-display {
       overflow-x: auto;
@@ -109,9 +109,18 @@
     }
     .callout { border-left: 3px solid var(--gold); padding: clamp(12px, 3vw, 16px); background: rgba(255, 212, 128, 0.07); border-radius: 12px; color: #f9e8c7; }
     .math-card { padding: clamp(16px, 3.5vw, 20px); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .math-card p.math-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+    .math-card p.math-display mjx-container[display="true"] {
+      min-width: max-content;
+    }
     .figure-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
     .figure-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
-    .hero-grid > *, .two-col > *, .figure-grid-2 > *, .figure-grid-3 > *, .two-up > *, .metric-grid > * { min-width: 0; }
+    .hero-grid > *, .two-col > *, .prototype-layout > *, .prototype-side > *, .figure-grid-2 > *, .figure-grid-3 > *, .two-up > *, .metric-grid > * { min-width: 0; }
     figure { margin: 0; }
     .figure-card { padding: clamp(14px, 3vw, 16px); }
     .figure-img { width: 100%; height: auto; display: block; border-radius: 14px; border: 1px solid rgba(255,255,255,0.10); background: #0a0a0a; }
@@ -122,6 +131,12 @@
     .prototype-panel .small { font-size: var(--fs-sm); line-height: 1.42; margin-bottom: 6px; }
     .prototype-panel .bullets { margin: 6px 0 8px; padding-left: 18px; }
     .prototype-panel .bullets li { margin-bottom: 1px; font-size: var(--fs-base); line-height: 1.42; }
+    .prototype-side { display: grid; gap: 16px; align-content: start; }
+    .prototype-explainer { padding: clamp(18px, 3.8vw, 22px); }
+    .prototype-explainer h3 { margin-top: 8px; }
+    .prototype-explainer p:last-child,
+    .prototype-formula p:last-child { margin-bottom: 0; }
+    .prototype-formula { padding: clamp(16px, 3.5vw, 20px); }
     .workflow { display: grid; grid-template-columns: 1fr; gap: 2px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
     .step { display: grid; grid-template-columns: 28px 1fr; column-gap: 10px; row-gap: 2px; align-items: start; padding: 7px 0; border-bottom: 1px dashed rgba(255,255,255,0.14); }
     .step:last-child { border-bottom: none; }
@@ -166,6 +181,9 @@
       margin-left: auto;
       margin-right: auto;
     }
+    @media (max-width: 1120px) {
+      .prototype-layout { grid-template-columns: 1fr; gap: 18px; }
+    }
     @media (max-width: 980px) {
       nav .wrap { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
       nav a { flex: 0 0 auto; }
@@ -175,6 +193,11 @@
       .step > div { display: block; }
       .step strong { white-space: normal; }
       .step p.small { display: block; overflow: visible; }
+    }
+    @media (max-width: 760px) {
+      .prototype-side { gap: 14px; }
+      .prototype-explainer,
+      .prototype-formula { padding: 16px; }
     }
     @media (max-width: 640px) {
       .metric-grid { grid-template-columns: 1fr; }
@@ -316,7 +339,7 @@
 
     <section id="prototype">
       <h2>Prototype estimator used in the scripts</h2>
-      <div class="two-col">
+      <div class="prototype-layout">
         <div>
           <div class="glass panel prototype-panel">
             <h3 style="margin-top:0">Prototype scope</h3>
@@ -338,26 +361,31 @@
             </div>
           </div>
         </div>
-        <div>
-          <p>The scripts instantiate the abstract nuisance regularizer with a concrete model: penalize high-frequency structure in the nuisance term. This drives the plasma estimate toward smoother Fourier behavior while preserving thin oscillatory ring structure in the explicit template family.</p>
-          <div class="glass math-card">
-            <p>
+        <div class="prototype-side">
+          <div class="glass panel prototype-explainer">
+            <div class="eyebrow">Concrete nuisance model</div>
+            <h3>How the scripts operationalize the estimator</h3>
+            <p>The scripts instantiate the abstract nuisance regularizer with a concrete model: penalize high-frequency structure in the nuisance term. This drives the plasma estimate toward smoother Fourier behavior while preserving thin oscillatory ring structure in the explicit template family.</p>
+            <p class="muted">For fixed $(\alpha,\theta)$, this yields a closed-form nuisance estimate, so a practical grid search over $\theta$ and $\lambda$ is feasible in the prototype.</p>
+          </div>
+          <div class="glass math-card prototype-formula">
+            <div class="eyebrow">Prototype objective</div>
+            <p class="math-display">
               $$
               \min_{\alpha,\theta,q}
               \|y-\alpha g_{\theta}-q\|^2 + \lambda \|H q\|^2,
               $$
             </p>
-            <p>
-              where $H$ is a frequency-weighting operator that penalizes high-frequency content in $q$.
-            </p>
+            <p class="small">Here $H$ is a frequency-weighting operator that penalizes high-frequency content in $q$.</p>
           </div>
-          <p>For fixed $(\alpha,\theta)$, this yields a closed-form nuisance estimate, so a practical grid search over $\theta$ and $\lambda$ is feasible in the prototype.</p>
-          <div class="glass math-card">
-            <p>
+          <div class="glass math-card prototype-formula">
+            <div class="eyebrow">Closed-form nuisance update</div>
+            <p class="math-display">
               $$
               \hat q(\alpha,\theta) = (I + \lambda H^*H)^{-1}(y-\alpha g_{\theta}).
               $$
             </p>
+            <p class="small">This update is what makes the template and regularization sweep numerically practical in the scripts.</p>
           </div>
         </div>
       </div>
