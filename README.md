@@ -1,5 +1,7 @@
 # BHEX-Motivated Photon Ring Analysis
 
+*Jonathan R. Landers, independent researcher. This project is inspired by published BHEX work and is not affiliated with the BHEX collaboration or mission team.*
+
 This repository contains a short paper, a standalone HTML presentation, and a three-stage Python prototype for a Fourier-domain photon-ring inference workflow inspired by the Black Hole Explorer (BHEX) program.
 
 The motivating idea is simple:
