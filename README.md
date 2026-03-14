@@ -273,6 +273,14 @@ Natural upgrades, also reflected in the HTML presentation, include:
 - posterior summaries or uncertainty bands
 - confidence diagnostics tied more directly to recoverability margins
 
+## Related BHEX papers
+
+The mathematical framing in this repository is motivated by the broader BHEX program. The paper in this repo cites these BHEX collaboration references directly:
+
+- *Black Hole Explorer: Motivation and Vision*, arXiv:2406.12917, https://arxiv.org/abs/2406.12917
+- *The Black Hole Explorer: Photon Ring Science, Detection and Shape Measurement*, arXiv:2406.09498, https://arxiv.org/abs/2406.09498
+- *Interferometric Inference of Black Hole Spin from Photon Ring Size and Brightness*, arXiv:2509.23628, https://arxiv.org/abs/2509.23628
+
 ## Bottom line
 
 This repository is best read as a BHEX-motivated thought experiment made executable.
