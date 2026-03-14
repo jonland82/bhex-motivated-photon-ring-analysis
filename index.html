@@ -59,6 +59,24 @@
     .kicker { color: var(--cyan); text-transform: uppercase; letter-spacing: 0.18em; font-size: var(--fs-2xs); font-weight: 700; }
     h1 { font-size: var(--fs-2xl); line-height: 1.04; margin: 10px 0 14px; letter-spacing: -0.035em; }
     .subtitle { font-size: var(--fs-md); color: var(--muted); max-width: none; }
+    .hero-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(126,231,255,0.24);
+      background: rgba(126,231,255,0.10);
+      color: var(--text);
+      font-size: var(--fs-sm);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .hero-link:hover {
+      color: var(--text);
+      background: rgba(126,231,255,0.16);
+      border-color: rgba(126,231,255,0.42);
+    }
     .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 26px; align-items: center; margin-top: 26px; }
     .glass { background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
     .hero-card { padding: 24px 24px 18px; }
@@ -193,6 +211,9 @@
     <p class="muted" style="margin:-4px 0 6px; font-weight:600;">Jonathan R. Landers</p>
     <p class="small" style="margin:0 0 12px;">Independent researcher; not affiliated with the BHEX collaboration or mission team.</p>
     <p class="subtitle">This report examines the physical intuition, source-separation mathematics, and image-driven tuning/inference pipeline motivated by the proposed Black Hole Explorer (BHEX) mission, mapping synthetic black-hole images to visibility data, estimating ring parameters, and producing ring-emphasized diagnostic images.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup></p>
+    <div class="hero-links">
+      <a class="hero-link" href="fourier-domain-analysis-bhex.pdf" target="_blank" rel="noopener">Open PDF Paper</a>
+    </div>
 
     <div class="hero-grid">
       <div class="glass hero-card">

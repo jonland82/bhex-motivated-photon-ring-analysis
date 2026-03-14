@@ -12,6 +12,8 @@ The repository makes that story concrete with synthetic images, Fourier-domain f
 
 It is a research prototype designed for methodological clarity and communication, not a mission-grade astrophysical pipeline.
 
+For the quickest overview, start with the GitHub Pages site or `index.html`, then read `fourier-domain-analysis-bhex.pdf`, then inspect the scripts in `simulation/`.
+
 At the center of the prototype is a simple decomposition of the observed visibility:
 
 $$
