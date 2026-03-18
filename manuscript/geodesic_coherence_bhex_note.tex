@@ -1,0 +1,406 @@
+\documentclass[10pt,letterpaper,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[top=0.76in,bottom=0.82in,left=0.72in,right=0.72in,columnsep=0.23in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+\setstretch{0.995}
+\setlength{\parindent}{0.9em}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{0.23in}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.2em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.3em,itemsep=0.2em,topsep=0.35em}
+\setlength{\abovedisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\belowdisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{7pt plus 2pt minus 2pt}
+\setlength{\intextsep}{7pt plus 2pt minus 2pt}
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom
+
+\definecolor{TitleRule}{HTML}{D9DEE7}
+\definecolor{TitleNote}{HTML}{4B5563}
+\definecolor{HeadingInk}{HTML}{1F2937}
+\definecolor{HeadingRule}{HTML}{CBD5E1}
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\setcounter{secnumdepth}{2}
+
+\titleformat{\section}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {\thesection}
+  {0.65em}
+  {}
+\titleformat{name=\section,numberless}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {}
+  {0pt}
+  {}
+\titleformat{\subsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsection}
+  {0.55em}
+  {}
+\titleformat{\subsubsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsubsection}
+  {0.5em}
+  {}
+\titlespacing*{\section}{0pt}{0.95em}{0.35em}
+\titlespacing*{\subsection}{0pt}{0.75em}{0.25em}
+\titlespacing*{\subsubsection}{0pt}{0.55em}{0.2em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\title{Geodesic-Provenance Coherence Bounds for Fourier-Domain Photon-Ring Inference}
+\author{Jonathan R. Landers}
+\date{}
+
+\newcommand{\affiliationnote}{Independent researcher.\\
+This note extends the structured Fourier-domain analysis in \\
+\emph{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference} and is not affiliated\\
+with the BHEX collaboration or mission team.}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \twocolumn[{%
+    \begin{@twocolumnfalse}
+      \vspace*{-1.3em}
+      {\LARGE\sffamily\bfseries\raggedright \@title \par}
+      \vspace{0.35em}
+      {\normalsize\sffamily\raggedright \@author \par}
+      \vspace{0.16em}
+      {\small\color{TitleNote}\raggedright \affiliationnote \par}
+      \vspace{0.65em}
+      {\color{TitleRule}\hrule height 0.8pt}
+      \vspace{0.8em}
+    \end{@twocolumnfalse}
+  }]
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+In the companion note \emph{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference}
+[\hyperlink{ref-1}{1}], the visibility data are modeled as
+\[
+y = \alpha g_\theta + q + \varepsilon,
+\]
+where $g_\theta$ is a photon-ring visibility family, $q$ is structured nuisance,
+and $\varepsilon$ is noise. The main conclusion there is conceptual and useful: the
+long-baseline amplitude heuristic can lose \textbf{readability} before the ring loses
+\textbf{recoverability} under a structured inverse-problem formulation [\hyperlink{ref-1}{1}].
+
+The next natural question is whether the nuisance term can be constrained more sharply by physics.
+The purpose of this note is to show that the answer is yes: if one lifts the model from visibility
+space back to photon initial-condition space and keeps track of \textbf{geodesic provenance},
+then the relevant ring-background coherence admits an explicit upper bound in terms of the
+cross-correlation of escaping geodesic families. This turns the sharpening from a structural remark
+into a quantitative theorem, still in the spirit of the BHEX long-baseline program
+[\hyperlink{ref-2}{2}, \hyperlink{ref-3}{3}, \hyperlink{ref-4}{4}].
+
+\section{Original formalism and provenance lift}
+
+The original abstraction is
+\[
+y = \alpha g_\theta + q + \varepsilon,
+\]
+with the nuisance treated as an abstract structured class. To refine this, let
+\[
+z = (p,\xi)
+\]
+denote a photon initial condition, where $p$ is an emission event and $\xi$ is an initial null direction.
+Write $\gamma_z$ for the associated null geodesic and split phase space into
+\[
+E = \{z : \gamma_z \text{ escapes}\}, \qquad C = \{z : \gamma_z \text{ is captured}\}.
+\]
+Only $E$ contributes to the observed data. If $f$ is an emission density over initial conditions,
+then the observed image can be written schematically as
+\[
+I = T_E f,
+\]
+where $T_E$ pushes escaping photons to the image plane, and the measured visibility is
+\[
+y = \mathcal F(T_E f) + \varepsilon.
+\]
+
+Now split the escaping set into two provenance classes,
+\[
+E = E_{\mathrm{ring}} \,\dot\cup\, E_{\mathrm{bg}},
+\]
+where $E_{\mathrm{ring}}$ consists of near-critical escaping geodesics that generate the photon-ring signal,
+and $E_{\mathrm{bg}}$ contains the remaining escaping geodesics. Then
+\[
+T_E f = T_{E_{\mathrm{ring}}} f + T_{E_{\mathrm{bg}}} f.
+\]
+Defining
+\[
+h_\theta := T_{E_{\mathrm{ring}}} f_\theta, \qquad b := T_{E_{\mathrm{bg}}} f,
+\]
+gives
+\[
+I = \alpha h_\theta + b, \qquad y = \alpha g_\theta + q + \varepsilon,
+\]
+with
+\[
+g_\theta = \mathcal F h_\theta, \qquad q = \mathcal F b.
+\]
+The functional form of the inverse problem is unchanged, but the nuisance class is no longer arbitrary:
+it is generated by ordinary escaping geodesics.
+
+\section{Operator setup and provenance-constrained coherence}
+
+Let $\mathcal Z$ be photon initial-condition space equipped with a measure $\nu$, and let $\mathcal H$
+be the visibility Hilbert space. Define two bounded linear operators
+\[
+A_r := \mathcal F T_{E_{\mathrm{ring}}}, \qquad A_b := \mathcal F T_{E_{\mathrm{bg}}},
+\]
+so that ring-generated and background-generated visibilities are of the form $A_r f$ and $A_b h$,
+respectively.
+
+Fix an admissible class $\mathcal A$ of background emission densities and let the provenance-constrained
+nuisance family be
+\[
+Q_{\mathrm{prov}} := \{A_b h : h \in \mathcal A,\ A_b h \neq 0\}.
+\]
+For a ring template $g \in \mathcal H$, define the family coherence
+\[
+\mu(g,Q_{\mathrm{prov}})
+:=
+\sup_{q\in Q_{\mathrm{prov}}}
+\frac{|\langle g,q\rangle|}{\|g\|\,\|q\|}.
+\]
+When $g = A_r f_\theta$, this is the physically relevant ring-background overlap.
+
+\par\smallskip\noindent{}\textbf{Theorem (Provenance-based coherence bound).}
+Assume there exist constants $\sigma_r,\sigma_b>0$ such that
+\[
+\|A_r f\| \ge \sigma_r \|f\|, \qquad \|A_b h\| \ge \sigma_b \|h\|
+\]
+for all admissible ring coefficients $f$ and background coefficients $h \in \mathcal A$.
+Let $g = A_r f_\theta$. Then
+\[
+\mu(g,Q_{\mathrm{prov}})
+\le
+\frac{\|A_b^*A_r\|}{\sigma_r\sigma_b}.
+\]
+Moreover, if $A_r$ and $A_b$ admit a visibility kernel $K(u,z)$ and one defines the cross-Gram kernel
+\[
+G(z,z') := \langle K(\cdot,z),K(\cdot,z')\rangle_{\mathcal H},
+\]
+then
+\begin{equation}
+\begin{aligned}
+\mu(g,Q_{\mathrm{prov}})
+&\le
+\frac{1}{\sigma_r\sigma_b}
+\biggl(
+\int_{E_{\mathrm{ring}}}\!\int_{E_{\mathrm{bg}}}
+|G(z,z')|^2\,d\nu(z)\,d\nu(z')
+\biggr)^{1/2}.
+\end{aligned}
+\end{equation}
+
+\par\smallskip\noindent{}\textbf{Proof.} Let $q=A_b h \in Q_{\mathrm{prov}}$. Then
+\[
+\begin{aligned}
+|\langle g,q\rangle|
+&= |\langle A_r f_\theta, A_b h\rangle| \\
+&= |\langle A_b^*A_r f_\theta, h\rangle| \\
+&\le \|A_b^*A_r\|\,\|f_\theta\|\,\|h\|.
+\end{aligned}
+\]
+By the lower bounds,
+\[
+\|g\|=\|A_r f_\theta\|\ge \sigma_r\|f_\theta\|,
+\qquad
+\|q\|=\|A_b h\|\ge \sigma_b\|h\|.
+\]
+Hence
+\[
+\frac{|\langle g,q\rangle|}{\|g\|\,\|q\|}
+\le
+\frac{\|A_b^*A_r\|}{\sigma_r\sigma_b}.
+\]
+Taking the supremum over $q \in Q_{\mathrm{prov}}$ proves the first claim. The second follows from the Hilbert-Schmidt bound
+\[
+\begin{aligned}
+\|A_b^*A_r\|
+&\le \|A_b^*A_r\|_{\mathrm{HS}} \\
+&= \left(
+\int_{E_{\mathrm{ring}}}\!\int_{E_{\mathrm{bg}}}
+|G(z,z')|^2\,d\nu(z)\,d\nu(z')
+\right)^{1/2}.
+\end{aligned}
+\]
+\hfill$\square$
+
+This is the new mathematical content. The coherence term that controlled the mismatch bound in the
+original note [\hyperlink{ref-1}{1}] is now itself controlled by a cross-correlation quantity on photon
+initial-condition space.
+
+\section{A geometric separation corollary}
+
+The preceding theorem becomes more informative if the two escaping families are separated by a geometric
+criticality index. Let $\chi(z)$ be any scalar measure of ring-likeness along an escaping geodesic,
+for example a winding count surrogate, a residence-time proxy near the photon region, or another criticality
+parameter.
+
+Assume there exists a threshold $\tau$ and a gap $\Delta>0$ such that
+\[
+\chi(z) \ge \tau \quad \text{for } z\in E_{\mathrm{ring}},
+\qquad
+\chi(z') \le \tau-\Delta \quad \text{for } z'\in E_{\mathrm{bg}}.
+\]
+Assume also that the cross-Gram kernel decays with criticality separation in the sense that
+\[
+|G(z,z')| \le M e^{-\beta |\chi(z)-\chi(z')|}
+\]
+for some $M,\beta>0$.
+
+\par\smallskip\noindent{}\textbf{Corollary (Exponential coherence decay under geodesic separation).}
+Under the preceding assumptions,
+\begin{equation}
+\begin{aligned}
+\mu(g,Q_{\mathrm{prov}})
+&\le
+\frac{M}{\sigma_r\sigma_b} e^{-\beta\Delta} \\
+&\quad \cdot \sqrt{\nu(E_{\mathrm{ring}})\,\nu(E_{\mathrm{bg}})}.
+\end{aligned}
+\end{equation}
+
+\par\smallskip\noindent{}\textbf{Proof.} The separation assumption implies
+\[
+|\chi(z)-\chi(z')| \ge \Delta
+\quad
+\text{for } z\in E_{\mathrm{ring}},\ z'\in E_{\mathrm{bg}},
+\]
+so the kernel bound gives
+\[
+|G(z,z')| \le M e^{-\beta\Delta}.
+\]
+Substituting into the Hilbert-Schmidt estimate of the theorem yields
+\begin{equation}
+\begin{aligned}
+\biggl(
+\int_{E_{\mathrm{ring}}}\!\int_{E_{\mathrm{bg}}}
+|G(z,z')|^2\,d\nu(z)\,d\nu(z')
+\biggr)^{1/2}
+&\le M e^{-\beta\Delta} \\
+&\quad \cdot \sqrt{\nu(E_{\mathrm{ring}})\,\nu(E_{\mathrm{bg}})},
+\end{aligned}
+\end{equation}
+which proves the claim.
+\hfill$\square$
+
+This is a stronger statement than monotonicity under subset restriction. It says that if ring-generating
+escape and ordinary escape are geometrically separated, then the Fourier-domain coherence decays
+\emph{quantitatively}. The sharper bound comes from phase-space geometry, not merely from saying that the
+nuisance class is smaller.
+
+\section{Sharpening the original mismatch and recoverability story}
+
+In the companion note [\hyperlink{ref-1}{1}], the heuristic-versus-structured mismatch is controlled by a term of the form
+\[
+\mu(g,\mathcal P)\frac{\|p\|}{\|g\|}
+\]
+plus noise. The new theorem suggests replacing an abstract nuisance overlap by an explicit provenance bound:
+\begin{equation}
+\mu(g,Q_{\mathrm{prov}})\frac{\|q\|}{\|g\|}
+\le
+\frac{\|A_b^*A_r\|}{\sigma_r\sigma_b}\frac{\|q\|}{\|g\|}.
+\end{equation}
+and, under geodesic separation,
+\begin{equation}
+\begin{aligned}
+\mu(g,Q_{\mathrm{prov}})\frac{\|q\|}{\|g\|}
+&\le
+\frac{M}{\sigma_r\sigma_b}e^{-\beta\Delta} \\
+&\quad \cdot \sqrt{\nu(E_{\mathrm{ring}})\,\nu(E_{\mathrm{bg}})}\frac{\|q\|}{\|g\|}.
+\end{aligned}
+\end{equation}
+So the old mismatch story becomes sharper in a specific way: the bias term is small whenever
+near-critical escaping flow and ordinary escaping flow are sufficiently decorrelated.
+
+The recoverability proposition from the original note remains conceptually the same, but its nuisance class is
+now physically constrained. The point is not simply that captured photons do not appear in the data. The more
+important fact is that the \emph{observable} nuisance must come from ordinary escaping geodesics, and that
+restriction can now be turned into a quantitative visibility-space overlap bound.
+
+\section{Physical interpretation and relation to BHEX}
+
+The BHEX idea is to use sufficiently long baselines to isolate the universal photon-ring signal from more
+complicated astrophysical emission [\hyperlink{ref-2}{2}, \hyperlink{ref-3}{3}]. The companion note [\hyperlink{ref-1}{1}] recasts that idea as a Fourier-domain structured source-separation problem. The present note pushes one step further: it identifies a route by which the
+relevant ring-background coherence might actually be estimated from geodesic geometry.
+
+In practical terms, the theorem says that the Fourier-domain nuisance is controlled by how strongly the
+ring-generating escaping family and the background escaping family correlate after transport to visibility
+space. If those families are dynamically distinct, then structured separation has a principled advantage beyond
+a vague “smaller nuisance” story.
+
+This remains an abstract framework. To turn it into an astrophysical forecast, one would need to specify
+admissible emission classes, choose a concrete criticality index, and estimate the cross-Gram kernel from ray
+tracing or simulation. But that is exactly the kind of bridge from abstract mathematics to physically informed
+BHEX-style inference that the original note pointed toward [\hyperlink{ref-1}{1}, \hyperlink{ref-3}{3}, \hyperlink{ref-4}{4}].
+
+\section{Key interesting points}
+
+\begin{itemize}
+\tightlist
+\item This note keeps the same Fourier-domain inverse-problem skeleton as the companion note, but lifts the
+nuisance model back to photon initial-condition space.
+\item The key new theorem bounds the ring-background coherence by $\|A_b^*A_r\|/(\sigma_r\sigma_b)$, and then by a
+cross-Gram integral over escaping geodesic families.
+\item Under a geometric separation hypothesis in a criticality index, the coherence decays exponentially in the
+separation gap $\Delta$.
+\item This is stronger than saying the nuisance class is merely smaller; it gives a concrete mechanism by which
+provenance can sharpen the mismatch term in the original note.
+\item The new note therefore earns independence only to the extent that coherence itself is now bounded by phase-space geometry rather than treated as an abstract parameter.
+\end{itemize}
+
+\section*{References}
+\addcontentsline{toc}{section}{References}
+
+\noindent{}\hypertarget{ref-1}{}{[}1{]} Jonathan R. Landers,
+\emph{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference}, 2026.
+
+\noindent{}\hypertarget{ref-2}{}{[}2{]} Black Hole Explorer Collaboration,
+\emph{Black Hole Explorer: Motivation and Vision}, arXiv:2406.12917.
+\url{https://arxiv.org/abs/2406.12917}
+
+\noindent{}\hypertarget{ref-3}{}{[}3{]} Black Hole Explorer Collaboration,
+\emph{The Black Hole Explorer: Photon Ring Science, Detection and Shape Measurement},
+arXiv:2406.09498. \url{https://arxiv.org/abs/2406.09498}
+
+\noindent{}\hypertarget{ref-4}{}{[}4{]} Black Hole Explorer Collaboration,
+\emph{Interferometric Inference of Black Hole Spin from Photon Ring Size and Brightness},
+arXiv:2509.23628. \url{https://arxiv.org/abs/2509.23628}
+
+\end{document}

@@ -1,0 +1,353 @@
+\documentclass[10pt,letterpaper,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[top=0.76in,bottom=0.82in,left=0.72in,right=0.72in,columnsep=0.23in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+\setstretch{0.995}
+\setlength{\parindent}{0.9em}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{0.23in}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.2em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.3em,itemsep=0.2em,topsep=0.35em}
+\setlength{\abovedisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\belowdisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{7pt plus 2pt minus 2pt}
+\setlength{\intextsep}{7pt plus 2pt minus 2pt}
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom
+
+\definecolor{TitleRule}{HTML}{D9DEE7}
+\definecolor{TitleNote}{HTML}{4B5563}
+\definecolor{HeadingInk}{HTML}{1F2937}
+\definecolor{HeadingRule}{HTML}{CBD5E1}
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\setcounter{secnumdepth}{2}
+
+\titleformat{\section}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {\thesection}
+  {0.65em}
+  {}
+\titleformat{name=\section,numberless}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {}
+  {0pt}
+  {}
+\titleformat{\subsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsection}
+  {0.55em}
+  {}
+\titleformat{\subsubsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsubsection}
+  {0.5em}
+  {}
+\titlespacing*{\section}{0pt}{0.95em}{0.35em}
+\titlespacing*{\subsection}{0pt}{0.75em}{0.25em}
+\titlespacing*{\subsubsection}{0pt}{0.55em}{0.2em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\title{A Summary of the Geodesic-Coherence Refinement for Fourier-Domain Photon-Ring Inference}
+\author{Jonathan R. Landers}
+\date{}
+
+\newcommand{\affiliationnote}{Independent researcher.\\
+This note summarizes the arc across \\
+\emph{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference} and\\
+\emph{Geodesic-Provenance Coherence Bounds for Fourier-Domain Photon-Ring Inference}, and is not affiliated\\
+with the BHEX collaboration or mission team.}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \twocolumn[{%
+    \begin{@twocolumnfalse}
+      \vspace*{-1.3em}
+      {\LARGE\sffamily\bfseries\raggedright \@title \par}
+      \vspace{0.35em}
+      {\normalsize\sffamily\raggedright \@author \par}
+      \vspace{0.16em}
+      {\small\color{TitleNote}\raggedright \affiliationnote \par}
+      \vspace{0.65em}
+      {\color{TitleRule}\hrule height 0.8pt}
+      \vspace{0.8em}
+    \end{@twocolumnfalse}
+  }]
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+The original Fourier-domain note [\hyperlink{ref-1}{1}] began with a simple model for long-baseline
+black-hole interferometry,
+\[
+y = \alpha g + p + \varepsilon,
+\]
+where $g$ is a photon-ring template, $p$ is structured background emission, and
+$\varepsilon$ is noise. Its main conceptual point was that \textbf{readability}
+and \textbf{recoverability} are not the same thing: a direct amplitude heuristic can lose
+clarity once the modulus nonlinearity distorts oscillation spacing, even though a structured
+inverse problem can still recover the ring stably. The mismatch between those two regimes is
+controlled by a ring-background coherence term together with nuisance size and noise.
+
+The later geodesic-coherence note [\hyperlink{ref-2}{2}] asked what that coherence term really means
+physically. Its answer was to lift the nuisance model from visibility space back to photon
+initial-condition space and show that the relevant overlap can itself be bounded by the geometry of
+escaping geodesic families. This summary note records that arc in one place, so that a reader who has
+already seen the two notes can latch onto the intuitive flow and the final result.
+
+\section{The original Fourier-domain story}
+
+In the first note [\hyperlink{ref-1}{1}], the visibility data are modeled in a complex Hilbert space as
+\[
+y = \alpha g + p + \varepsilon.
+\]
+A simple ring-oriented heuristic reads off information directly from the visibility amplitude, while a
+plasma-aware estimator explicitly projects away or jointly models structured nuisance. In the simplest
+subspace version, the key overlap quantity is
+\[
+\mu(g,\mathcal P)=\frac{\|\Pi_{\mathcal P}g\|}{\|g\|},
+\]
+where $\Pi_{\mathcal P}$ is orthogonal projection onto a nuisance subspace $\mathcal P$.
+
+The first lemma in that note made the mismatch story concrete: the discrepancy between a direct-readout
+estimator and a plasma-aware estimator is controlled by a coherence term of the schematic form
+\[
+\mu(g,\mathcal P)\frac{\|p\|}{\|g\|},
+\]
+together with noise contributions. So the heuristic does not fail arbitrarily. Its bias grows when the
+assumed ring template has significant projection into the nuisance family, or when the nuisance and noise
+become large relative to the ring.
+
+The accompanying proposition then sharpened the conceptual message. Because the modulus is nonlinear,
+moderate contamination can shift amplitude extrema and distort oscillation spacing, so \emph{clean
+readability} can break down even while a structured inverse problem remains locally identifiable and
+stable. In other words, \textbf{the heuristic readability limit can occur before the recoverability
+limit}. This was the first note's main structural contribution: it recast the BHEX long-baseline picture
+as a source-separation problem in which visual cleanliness is not the same thing as mathematical
+recoverability [\hyperlink{ref-3}{3}, \hyperlink{ref-4}{4}].
+
+\section{Why provenance had to enter}
+
+That first framework was intentionally abstract. It treated the nuisance class geometrically, but did not
+ask where the nuisance actually comes from. The next step was to notice that photons are not arbitrary
+signals in visibility space. They arise from initial conditions
+\[
+z=(p,\xi),
+\]
+where $p$ is an emission event and $\xi$ is an initial null direction, and then propagate along null
+geodesics.
+
+Let $E$ denote the set of escaping photon initial conditions. The crucial refinement is that the
+observable set itself naturally splits as
+\[
+E = E_{\mathrm{ring}} \,\dot\cup\, E_{\mathrm{bg}},
+\]
+where $E_{\mathrm{ring}}$ consists of near-critical escaping geodesics that generate the photon-ring
+signal, while $E_{\mathrm{bg}}$ consists of ordinary escaping geodesics that generate the broader
+background. Captured photons do not contribute to the data, but the deeper point is that even within the
+observable sector, ring and background come from distinct provenance classes.
+
+This reinterprets the Fourier-domain decomposition. Instead of treating $p$ or $q$ as an arbitrary
+structured contaminant, one writes the ring and the background as visibility-space images of transport
+operators acting on initial-condition densities. If
+\[
+A_r=\mathcal F T_{E_{\mathrm{ring}}},
+\qquad
+A_b=\mathcal F T_{E_{\mathrm{bg}}},
+\]
+then one has
+\[
+g=A_r f_\theta,
+\qquad
+q=A_b h,
+\]
+for suitable emission densities $f_\theta$ and $h$. The nuisance family is therefore no longer generic;
+it is constrained to the provenance class
+\[
+Q_{\mathrm{prov}}=\{A_b h:h\in\mathcal A\},
+\]
+for an admissible emission class $\mathcal A$.
+
+\section{The main new theorem}
+
+The real mathematical advance of the second note [\hyperlink{ref-2}{2}] was not just the observation that
+$Q_{\mathrm{prov}}$ is smaller than an abstract nuisance class. It was an explicit upper bound on the
+provenance-constrained coherence itself. For a ring template $g$, define
+\[
+\mu(g,Q_{\mathrm{prov}})
+:=
+\sup_{q\in Q_{\mathrm{prov}}\setminus\{0\}}
+\frac{|\langle g,q\rangle|}{\|g\|\,\|q\|}.
+\]
+Assume the transport operators satisfy lower nondegeneracy bounds
+\[
+\|A_r f\|\ge \sigma_r\|f\|,
+\qquad
+\|A_b h\|\ge \sigma_b\|h\|,
+\]
+on the relevant classes.
+
+If the operators admit a visibility kernel $K(u,z)$, define the cross-Gram kernel
+\[
+G(z,z'):=\langle K(\cdot,z),K(\cdot,z')\rangle_{\mathcal H}.
+\]
+Then the key theorem says that
+\begin{equation}
+\begin{aligned}
+\mu(g,Q_{\mathrm{prov}})
+&\le
+\frac{1}{\sigma_r\sigma_b}
+\biggl(
+\int_{E_{\mathrm{ring}}}\!\int_{E_{\mathrm{bg}}}
+|G(z,z')|^2\,d\nu(z)\,d\nu(z')
+\biggr)^{1/2}.
+\end{aligned}
+\end{equation}
+
+This is the centerpiece. The abstract overlap term from the original note is now lifted to photon
+initial-condition space and bounded by a cross-correlation integral over escaping geodesic families.
+That is what turns the provenance idea into a genuinely new theorem rather than a structural remark.
+
+\section{The geometric separation corollary}
+
+To turn the preceding theorem into a more geometric statement, the second note introduces a scalar
+criticality index $\chi(z)$ measuring how ``ring-like'' an escaping trajectory is. The specific choice can
+vary; it might be tied to winding depth, near-photon-region residence time, or another surrogate for
+criticality.
+
+Assume there is a gap $\Delta>0$ such that ring-generating and background-generating trajectories are
+separated in this index:
+\[
+|\chi(z)-\chi(z')|\ge \Delta
+\quad
+\text{for } z\in E_{\mathrm{ring}},\ z'\in E_{\mathrm{bg}}.
+\]
+Assume also that the cross-Gram kernel decays exponentially with this separation:
+\[
+|G(z,z')|\le M e^{-\beta |\chi(z)-\chi(z')|}.
+\]
+Then the coherence itself obeys the explicit bound
+\begin{equation}
+\begin{aligned}
+\mu(g,Q_{\mathrm{prov}})
+&\le
+\frac{M}{\sigma_r\sigma_b}e^{-\beta\Delta} \\
+&\quad \cdot \sqrt{\nu(E_{\mathrm{ring}})\,\nu(E_{\mathrm{bg}})}.
+\end{aligned}
+\end{equation}
+
+This is the genuinely geometric conclusion. It says that the key overlap term in the Fourier-domain
+mismatch story becomes quantitatively small when the near-critical escaping flow and the ordinary
+escaping flow are dynamically well separated. The stronger statement is not merely that the nuisance class
+is smaller, but that its coherence with the ring can decay exponentially under a phase-space separation
+hypothesis.
+
+\section{What changed across the two notes}
+
+Taken together, the two notes tell a coherent story.
+
+The first note [\hyperlink{ref-1}{1}] established that direct amplitude readability can fail before
+structured recoverability, with the mismatch controlled by coherence, nuisance magnitude, and noise.
+The second note [\hyperlink{ref-2}{2}] identified a physically meaningful way to sharpen that coherence
+term. By lifting the model to photon initial-condition space and splitting the escaping set into ring and
+background provenance classes, it proved that the relevant overlap is bounded by a cross-Gram integral over
+escaping geodesic families. Under a criticality-gap assumption, that overlap decays exponentially.
+
+So the original question was:
+\[
+\text{Can the ring remain recoverable after it stops being cleanly readable?}
+\]
+The refined answer is:
+\[
+\text{Yes, and the degree of recoverability is controlled by}
+\]
+\[
+\text{the geometric separation of escaping photon families.}
+\]
+
+That is the intuitive arc. The original note gave an abstract structural theory of mismatch and
+robustness. The second note showed that the key overlap term in that theory is not merely formal: under
+natural operator and separation assumptions, it is governed by null-geodesic phase-space geometry.
+
+\section{Relation to BHEX and computational outlook}
+
+This summary still sits squarely in the spirit of the BHEX long-baseline program
+[\hyperlink{ref-3}{3}, \hyperlink{ref-4}{4}, \hyperlink{ref-5}{5}]. BHEX emphasizes that sufficiently
+long baselines should reveal a more universal photon-ring signal beneath broader astrophysical emission.
+The first note recast that intuition as a Fourier-domain structured source-separation problem. The second
+note then identified a route by which the key overlap term in that source-separation problem could, in
+principle, be estimated from geodesic geometry.
+
+The framework remains abstract until one chooses an admissible emission class, a concrete criticality
+index, and a practical way to estimate the cross-Gram kernel from ray tracing or simulation. But this is
+exactly the bridge the two notes were moving toward: from abstract mismatch and recoverability statements
+to physically informed BHEX-style inference.
+
+\section{Key interesting points}
+
+\begin{itemize}
+\tightlist
+\item The first note introduced a Fourier-domain structured source-separation framework and showed that
+readability can fail before recoverability [\hyperlink{ref-1}{1}].
+\item The second note lifted the nuisance model to photon initial-condition space and split the observable
+sector into ring-generating and background-generating escaping geodesics [\hyperlink{ref-2}{2}].
+\item The main new theorem bounded provenance-constrained coherence by a cross-Gram integral over escaping
+geodesic families.
+\item Under a criticality-gap assumption, that coherence decays exponentially with phase-space separation.
+\item The central advance is therefore not just ``less nuisance,'' but a concrete mechanism by which
+black-hole geodesic geometry sharpens the original Fourier-domain mismatch story.
+\end{itemize}
+
+\section*{References}
+\addcontentsline{toc}{section}{References}
+
+\noindent{}\hypertarget{ref-1}{}{[}1{]} Jonathan R. Landers,
+\emph{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference}, 2026.
+
+\noindent{}\hypertarget{ref-2}{}{[}2{]} Jonathan R. Landers,
+\emph{Geodesic-Provenance Coherence Bounds for Fourier-Domain Photon-Ring Inference}, 2026.
+
+\noindent{}\hypertarget{ref-3}{}{[}3{]} Black Hole Explorer Collaboration,
+\emph{Black Hole Explorer: Motivation and Vision}, arXiv:2406.12917.
+\url{https://arxiv.org/abs/2406.12917}
+
+\noindent{}\hypertarget{ref-4}{}{[}4{]} Black Hole Explorer Collaboration,
+\emph{The Black Hole Explorer: Photon Ring Science, Detection and Shape Measurement},
+arXiv:2406.09498. \url{https://arxiv.org/abs/2406.09498}
+
+\noindent{}\hypertarget{ref-5}{}{[}5{]} Black Hole Explorer Collaboration,
+\emph{Interferometric Inference of Black Hole Spin from Photon Ring Size and Brightness},
+arXiv:2509.23628. \url{https://arxiv.org/abs/2509.23628}
+
+\end{document}
