@@ -4,7 +4,7 @@
 
 *Jonathan R. Landers, independent researcher. This project is inspired by published BHEX work and is not affiliated with the BHEX collaboration or mission team.*
 
-This repository contains a short paper, a standalone HTML presentation, and a three-stage Python prototype for a Fourier-domain photon-ring inference workflow inspired by the Black Hole Explorer (BHEX) program.
+This repository contains three short manuscript notes, a standalone HTML presentation, and a three-stage Python prototype for a Fourier-domain photon-ring inference workflow inspired by the Black Hole Explorer (BHEX) program.
 
 The motivating idea is simple:
 
@@ -14,9 +14,11 @@ The motivating idea is simple:
 
 The repository makes that story concrete with synthetic images, Fourier-domain fitting, hyperparameter tuning, and held-out reconstruction.
 
+The Python scripts implement only the first, abstract Fourier-domain note. The later geodesic-coherence note and the summary note extend the mathematics, but are not implemented numerically in the prototype.
+
 It is a research prototype designed for methodological clarity and communication, not a mission-grade astrophysical pipeline.
 
-For the quickest overview, start with the GitHub Pages site or `index.html`, then read `fourier-domain-analysis-bhex.pdf`, then inspect the scripts in `simulation/`.
+For the quickest overview, start with the GitHub Pages site or `index.html`, then read `manuscript/fourier-domain-analysis-bhex.pdf`, `manuscript/geodesic_coherence_bhex_note.pdf`, and `manuscript/geodesic_coherence_summary_note_updated.pdf`, then inspect the scripts in `simulation/`.
 
 At the center of the prototype is a simple decomposition of the observed visibility:
 
@@ -28,14 +30,18 @@ where $g_{\theta}$ is a ring template, $\alpha$ is its strength, $q$ is structur
 
 ## Repository contents and scope
 
-This repository combines a paper, a browser presentation, and a runnable prototype around one BHEX-motivated claim: a direct amplitude heuristic based on $|y|$ can become hard to read before a structured estimator loses the ability to recover the ring.
+This repository combines three notes, a browser presentation, and a runnable prototype around one BHEX-motivated claim: a direct amplitude heuristic based on $|y|$ can become hard to read before a structured estimator loses the ability to recover the ring.
 
-- `fourier-domain-analysis-bhex.pdf`
-  - the short paper that states the central mathematical argument
+- `manuscript/fourier-domain-analysis-bhex.pdf`
+  - the first note, which states the central Fourier-domain mismatch and recoverability argument
+- `manuscript/geodesic_coherence_bhex_note.pdf`
+  - the second note, which lifts the nuisance model to photon initial-condition space and proves provenance-based coherence bounds
+- `manuscript/geodesic_coherence_summary_note_updated.pdf`
+  - the summary note, which records the mathematical arc across the first two notes
 - `index.html`
-  - a self-contained presentation of the same story, with figures and summary metrics
+  - a self-contained presentation of the implemented prototype together with the later mathematical extensions
 - `manuscript/`
-  - the LaTeX source for the paper and related manuscript files
+  - the LaTeX source for the notes and related manuscript files
 - `simulation/01_generate_synthetic_bhex_images.py`
   - generates synthetic images with a thin ring, broader plasma, blur, and noise
 - `simulation/02_tune_bhex_estimator.py`
@@ -51,15 +57,19 @@ Together, these pieces form one deliberately scoped workflow:
 
 This is not blind source separation. The ring is modeled explicitly as a template family $g_{\theta}$, while the plasma is pushed into a smoother nuisance class $q$.
 
+In the runnable code, that nuisance class is implemented as a smooth Fourier penalty on the full FFT visibility plane. The provenance-constrained nuisance classes and cross-Gram bounds from the later notes remain mathematical extensions only.
+
 ## Main mathematical contributions
 
-The paper contributes a compact mathematical framing for the prototype:
+Across the three notes, the repository contributes a compact mathematical framing:
 
-- it gives a mismatch comparison between a direct amplitude heuristic and a plasma-aware estimator
-- it identifies the key controls on that gap: ring-plasma overlap, nuisance strength, and noise
-- it argues that heuristic readability can fail before structured recoverability fails
-- it reframes the inference problem as physics-structured source separation in Fourier space
-- it points toward the next scientific step: estimating coherence or identifiability margins for more realistic astrophysical nuisance classes
+- the first note gives a mismatch comparison between a direct amplitude heuristic and a plasma-aware estimator
+- the first note identifies the key controls on that gap: ring-plasma overlap, nuisance strength, and noise
+- the first note argues that heuristic readability can fail before structured recoverability fails
+- the second note lifts the nuisance model to photon initial-condition space and defines provenance-constrained coherence
+- the second note bounds that coherence by $\|A_b^*A_r\|/(\sigma_r\sigma_b)$ and then by a cross-Gram integral over escaping geodesic families
+- the second note derives a geometric separation corollary in which coherence decays exponentially with a criticality gap
+- the summary note records that arc in one place and clarifies how the geodesic refinement sharpens the original Fourier-domain story
 
 ## Requirements
 
@@ -164,7 +174,7 @@ This is calibration rather than machine-learning training: the script is choosin
 
 Conceptually it does four things:
 
-- builds a bank of ring templates
+- builds a bank of circular Gaussian ring templates
 - searches over candidate ring radii $\theta$
 - regularizes the nuisance term $q$ so it stays smoother than the ring
 - chooses the best hyperparameters by balancing radius error, amplitude error, and confidence
@@ -236,7 +246,7 @@ The main visualization knobs in this script control:
 
 ## Default behavior and example results
 
-The paper, the HTML page, and the default scripts are aligned around the same toy setup. With the current defaults, a full run produces roughly:
+The notes, the HTML page, and the default scripts are aligned around the same toy setup. With the current defaults, a full run produces roughly:
 
 - the best tuned `lambda` is about `63.1`
 - the best template width is `4.0` pixels in the original image grid
@@ -251,7 +261,7 @@ These are not universal scientific conclusions. They are example results for thi
 If you want the repository in the order of highest payoff, inspect these in order:
 
 1. `index.html` for the high-level story and figures
-2. `fourier-domain-analysis-bhex.pdf` for the compact conceptual argument
+2. `manuscript/fourier-domain-analysis-bhex.pdf` for the compact conceptual argument
 3. `bhex_model_tuning/tuned_model.json` after a run
 4. `bhex_model_tuning/heatmap_radius_mae.png`
 5. `bhex_holdout_results/holdout_predictions.csv`
@@ -266,8 +276,10 @@ This prototype is intentionally narrow. It currently uses:
 - circular Gaussian-like ring templates
 - a broad crescent-like plasma model in the synthetic images
 - full-image FFTs rather than realistic sparse baseline sampling
-- a smoothness penalty for nuisance structure instead of a GRMHD-informed nuisance family
+- a smoothness penalty for nuisance structure instead of a provenance-constrained or ray-tracing-informed nuisance family
 - point estimates and simple confidence scores rather than full uncertainty quantification
+
+It does not currently estimate provenance operators $A_r$ or $A_b$, a provenance-constrained nuisance family $Q_{\mathrm{prov}}$, a criticality index, or a cross-Gram kernel. Those belong to the later mathematical notes, not to the present Python implementation.
 
 That scope is a feature, not a bug. The goal is to isolate the estimation mechanism clearly before adding astrophysical realism.
 
@@ -275,13 +287,15 @@ Natural upgrades, also reflected in the HTML presentation, include:
 
 - elliptical or spin-informed ring families
 - explicit baseline masks and more realistic visibility sampling
-- GRMHD-informed nuisance classes
+- provenance-constrained nuisance classes
+- cross-Gram or $A_b^*A_r$ estimates from ray tracing or simulation
+- criticality indices that turn geometric separation into a computable recoverability diagnostic
 - posterior summaries or uncertainty bands
 - confidence diagnostics tied more directly to recoverability margins
 
 ## Related BHEX papers
 
-The mathematical framing in this repository is motivated by the broader BHEX program. The paper in this repo cites these BHEX collaboration references directly:
+The mathematical framing in this repository is motivated by the broader BHEX program. The notes in this repo cite these BHEX collaboration references directly:
 
 - *Black Hole Explorer: Motivation and Vision*, arXiv:2406.12917, https://arxiv.org/abs/2406.12917
 - *The Black Hole Explorer: Photon Ring Science, Detection and Shape Measurement*, arXiv:2406.09498, https://arxiv.org/abs/2406.09498
@@ -295,4 +309,4 @@ It starts from the physical picture of a thin photon ring embedded in broader pl
 
 can a ring-aware estimator still recover the geometry after a simple long-baseline readout has become hard to interpret?
 
-The paper argues yes in principle. The scripts show one concrete toy implementation of that argument.
+The first note argues yes in principle. The scripts show one concrete toy implementation of that first-note argument, while the later notes extend the mathematics beyond what is currently implemented.
