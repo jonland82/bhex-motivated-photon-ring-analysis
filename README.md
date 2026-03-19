@@ -18,7 +18,7 @@ The Python scripts implement only the first, abstract Fourier-domain note. The l
 
 It is a research prototype designed for methodological clarity and communication, not a mission-grade astrophysical pipeline.
 
-For the quickest overview, start with the GitHub Pages site or `index.html`, then read `manuscript/fourier-domain-analysis-bhex.pdf`, `manuscript/geodesic_coherence_bhex_note.pdf`, and `manuscript/geodesic_coherence_summary_note_updated.pdf`, then inspect the scripts in `simulation/`.
+For the quickest overview, start with the GitHub Pages site or [index.html](index.html), then read [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf), [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf), and [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf), then inspect the scripts in `simulation/`.
 
 At the center of the prototype is a simple decomposition of the observed visibility:
 
@@ -32,21 +32,21 @@ where $g_{\theta}$ is a ring template, $\alpha$ is its strength, $q$ is structur
 
 This repository combines three notes, a browser presentation, and a runnable prototype around one BHEX-motivated claim: a direct amplitude heuristic based on $|y|$ can become hard to read before a structured estimator loses the ability to recover the ring.
 
-- `manuscript/fourier-domain-analysis-bhex.pdf`
+- [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf)
   - the first note, which states the central Fourier-domain mismatch and recoverability argument
-- `manuscript/geodesic_coherence_bhex_note.pdf`
+- [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf)
   - the second note, which lifts the nuisance model to photon initial-condition space and proves provenance-based coherence bounds
-- `manuscript/geodesic_coherence_summary_note_updated.pdf`
+- [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf)
   - the summary note, which records the mathematical arc across the first two notes
-- `index.html`
+- [index.html](index.html)
   - a self-contained presentation of the implemented prototype together with the later mathematical extensions
 - `manuscript/`
   - the LaTeX source for the notes and related manuscript files
-- `simulation/01_generate_synthetic_bhex_images.py`
+- [simulation/01_generate_synthetic_bhex_images.py](simulation/01_generate_synthetic_bhex_images.py)
   - generates synthetic images with a thin ring, broader plasma, blur, and noise
-- `simulation/02_tune_bhex_estimator.py`
+- [simulation/02_tune_bhex_estimator.py](simulation/02_tune_bhex_estimator.py)
   - fits a Fourier-domain estimator with explicit ring templates $g_{\theta}$ and nuisance term $q$
-- `simulation/03_run_bhex_estimator_on_holdout.py`
+- [simulation/03_run_bhex_estimator_on_holdout.py](simulation/03_run_bhex_estimator_on_holdout.py)
   - applies the tuned model to held-out images and exports reconstructed ring/plasma diagnostics
 
 Together, these pieces form one deliberately scoped workflow:
@@ -112,7 +112,7 @@ The scripts form a linear pipeline: generate controlled data, tune the estimator
 
 ### 1. Generate synthetic images
 
-File: `simulation/01_generate_synthetic_bhex_images.py`
+File: [simulation/01_generate_synthetic_bhex_images.py](simulation/01_generate_synthetic_bhex_images.py)
 
 This stage creates a toy dataset with known ground truth. Each sample includes:
 
@@ -131,8 +131,8 @@ With the current defaults it creates:
 
 It writes:
 
-- `bhex_synthetic_dataset/metadata.csv`
-- `bhex_synthetic_dataset/dataset_config.json`
+- [bhex_synthetic_dataset/metadata.csv](bhex_synthetic_dataset/metadata.csv)
+- [bhex_synthetic_dataset/dataset_config.json](bhex_synthetic_dataset/dataset_config.json)
 - `bhex_synthetic_dataset/tune/images_npy/*.npy`
 - `bhex_synthetic_dataset/tune/png/*.png`
 - `bhex_synthetic_dataset/holdout/images_npy/*.npy`
@@ -158,7 +158,7 @@ The most useful knobs near the top of the file are:
 
 ### 2. Tune the estimator
 
-File: `simulation/02_tune_bhex_estimator.py`
+File: [simulation/02_tune_bhex_estimator.py](simulation/02_tune_bhex_estimator.py)
 
 This stage reads the synthetic tuning set, downsamples the images for speed, moves them into Fourier space, and searches for a good estimator configuration.
 
@@ -189,13 +189,13 @@ With the current defaults it searches over:
 
 It writes:
 
-- `bhex_model_tuning/tuned_model.json`
-- `bhex_model_tuning/tuning_grid_summary.csv`
-- `bhex_model_tuning/tuning_predictions.csv`
-- `bhex_model_tuning/heatmap_radius_mae.png`
-- `bhex_model_tuning/heatmap_confidence.png`
-- `bhex_model_tuning/scatter_true_vs_estimated_radius.png`
-- `bhex_model_tuning/hist_radius_error.png`
+- [bhex_model_tuning/tuned_model.json](bhex_model_tuning/tuned_model.json)
+- [bhex_model_tuning/tuning_grid_summary.csv](bhex_model_tuning/tuning_grid_summary.csv)
+- [bhex_model_tuning/tuning_predictions.csv](bhex_model_tuning/tuning_predictions.csv)
+- [bhex_model_tuning/heatmap_radius_mae.png](bhex_model_tuning/heatmap_radius_mae.png)
+- [bhex_model_tuning/heatmap_confidence.png](bhex_model_tuning/heatmap_confidence.png)
+- [bhex_model_tuning/scatter_true_vs_estimated_radius.png](bhex_model_tuning/scatter_true_vs_estimated_radius.png)
+- [bhex_model_tuning/hist_radius_error.png](bhex_model_tuning/hist_radius_error.png)
 - `bhex_model_tuning/*_tuning_example.png`
 
 The most important knobs near the top of the file are:
@@ -211,7 +211,7 @@ The most important knobs near the top of the file are:
 
 ### 3. Run held-out inference
 
-File: `simulation/03_run_bhex_estimator_on_holdout.py`
+File: [simulation/03_run_bhex_estimator_on_holdout.py](simulation/03_run_bhex_estimator_on_holdout.py)
 
 This stage loads the tuned model from step 2 and applies it to the held-out images.
 
@@ -224,10 +224,10 @@ For each held-out sample it:
 
 It writes:
 
-- `bhex_holdout_results/holdout_predictions.csv`
-- `bhex_holdout_results/scatter_true_vs_estimated_radius_holdout.png`
-- `bhex_holdout_results/hist_radius_error_holdout.png`
-- `bhex_holdout_results/confidence_vs_radius_error_holdout.png`
+- [bhex_holdout_results/holdout_predictions.csv](bhex_holdout_results/holdout_predictions.csv)
+- [bhex_holdout_results/scatter_true_vs_estimated_radius_holdout.png](bhex_holdout_results/scatter_true_vs_estimated_radius_holdout.png)
+- [bhex_holdout_results/hist_radius_error_holdout.png](bhex_holdout_results/hist_radius_error_holdout.png)
+- [bhex_holdout_results/confidence_vs_radius_error_holdout.png](bhex_holdout_results/confidence_vs_radius_error_holdout.png)
 - `bhex_holdout_results/*_ring_hat.npy`
 - `bhex_holdout_results/*_plasma_hat.npy`
 - `bhex_holdout_results/*_ring_emphasized.png`
@@ -260,11 +260,11 @@ These are not universal scientific conclusions. They are example results for thi
 
 If you want the repository in the order of highest payoff, inspect these in order:
 
-1. `index.html` for the high-level story and figures
-2. `manuscript/fourier-domain-analysis-bhex.pdf` for the compact conceptual argument
-3. `bhex_model_tuning/tuned_model.json` after a run
-4. `bhex_model_tuning/heatmap_radius_mae.png`
-5. `bhex_holdout_results/holdout_predictions.csv`
+1. [index.html](index.html) for the high-level story and figures
+2. [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf) for the compact conceptual argument
+3. [bhex_model_tuning/tuned_model.json](bhex_model_tuning/tuned_model.json) after a run
+4. [bhex_model_tuning/heatmap_radius_mae.png](bhex_model_tuning/heatmap_radius_mae.png)
+5. [bhex_holdout_results/holdout_predictions.csv](bhex_holdout_results/holdout_predictions.csv)
 6. several `bhex_holdout_results/*_ring_emphasized.png` images
 
 The emphasized PNGs are especially useful because they show whether the recovered ring looks like a coherent thin structure rather than a broad halo.
