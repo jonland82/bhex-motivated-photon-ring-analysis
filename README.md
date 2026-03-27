@@ -4,7 +4,9 @@
 
 *Jonathan R. Landers, independent researcher. This project is inspired by published BHEX work and is not affiliated with the BHEX collaboration or mission team.*
 
-This repository contains three short manuscript notes, a standalone HTML presentation, and a three-stage Python prototype for a Fourier-domain photon-ring inference workflow inspired by the Black Hole Explorer (BHEX) program.
+The Black Hole Explorer (BHEX) mission is motivated by the idea that sufficiently long interferometric baselines may isolate a thin, more universal photon-ring signal beneath brighter, broader plasma emission around a black hole. This repository takes that BHEX-motivated ring-versus-plasma separation problem and turns it into a deliberately scoped synthetic Fourier-domain prototype whose purpose is methodological clarity, communication, and a concrete test of when a structured estimator can still recover the ring after a direct amplitude heuristic becomes hard to read.
+
+Presented within are three short manuscript notes, a standalone HTML presentation, and a three-stage Python prototype for a Fourier-domain photon-ring inference workflow inspired by the Black Hole Explorer (BHEX) program.
 
 The motivating idea is simple:
 
