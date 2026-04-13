@@ -1,0 +1,294 @@
+
+\documentclass[10pt,letterpaper,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[top=0.76in,bottom=0.82in,left=0.72in,right=0.72in,columnsep=0.23in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+\setstretch{0.995}
+\setlength{\parindent}{0.9em}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{0.23in}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.2em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.3em,itemsep=0.2em,topsep=0.35em}
+\setlength{\abovedisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\belowdisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{7pt plus 2pt minus 2pt}
+\setlength{\intextsep}{7pt plus 2pt minus 2pt}
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom
+
+\definecolor{TitleRule}{HTML}{D9DEE7}
+\definecolor{TitleNote}{HTML}{4B5563}
+\definecolor{HeadingInk}{HTML}{1F2937}
+\definecolor{HeadingRule}{HTML}{CBD5E1}
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\setcounter{secnumdepth}{2}
+
+\titleformat{\section}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {\thesection}
+  {0.65em}
+  {}
+\titleformat{name=\section,numberless}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {}
+  {0pt}
+  {}
+\titleformat{\subsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsection}
+  {0.55em}
+  {}
+\titleformat{\subsubsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsubsection}
+  {0.5em}
+  {}
+\titlespacing*{\section}{0pt}{0.95em}{0.35em}
+\titlespacing*{\subsection}{0pt}{0.75em}{0.25em}
+\titlespacing*{\subsubsection}{0pt}{0.55em}{0.2em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\title{A Summary of the Provenance-and-Subring Refinement for Fourier-Domain Photon-Ring Inference}
+\author{Jonathan R. Landers}
+\date{}
+
+\newcommand{\affiliationnote}{Independent researcher.\\
+This note summarizes the arc across the Fourier-domain, provenance, geodesic-coherence, and subring-resolved\\
+BHEX notes and is not affiliated with the BHEX collaboration or mission team.}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \twocolumn[{%
+    \begin{@twocolumnfalse}
+      \vspace*{-1.3em}
+      {\LARGE\sffamily\bfseries\raggedright \@title \par}
+      \vspace{0.35em}
+      {\normalsize\sffamily\raggedright \@author \par}
+      \vspace{0.16em}
+      {\small\color{TitleNote}\raggedright \affiliationnote \par}
+      \vspace{0.65em}
+      {\color{TitleRule}\hrule height 0.8pt}
+      \vspace{0.8em}
+    \end{@twocolumnfalse}
+  }]
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+The original Fourier-domain note [\hyperlink{ref-1}{1}] modeled the visibility data as
+\[
+y = \alpha g + p + \varepsilon,
+\]
+where $g$ is a photon-ring template, $p$ is structured background emission, and $\varepsilon$ is noise. Its main conceptual point was that \textbf{readability} and \textbf{recoverability} are not the same thing: a direct long-baseline amplitude heuristic can lose clarity before a structured inverse problem loses the ring altogether. The next provenance note [\hyperlink{ref-2}{2}] made the nuisance family smaller and more physical by forcing it to arise from ordinary escaping geodesics. The later geodesic-coherence note [\hyperlink{ref-3}{3}] then bounded the relevant ring--background overlap by a cross-correlation quantity on photon initial-condition space.
+
+The present summary adds the new subring-resolved extension [\hyperlink{ref-4}{4}]. That final step refines the \emph{signal} side in the same spirit that the provenance notes refined the nuisance side: the ring is no longer treated as a single template, but as an exponentially weighted tower of winding-order subrings. The resulting arc is now conceptually symmetric. The nuisance becomes physically constrained by provenance, while the signal becomes physically resolved by winding order.
+
+\section{The original Fourier-domain skeleton}
+
+The first note [\hyperlink{ref-1}{1}] began from the visibility-space model
+\[
+y = \alpha g + p + \varepsilon.
+\]
+A direct heuristic reads information from the visibility amplitude, while a structured estimator explicitly models or projects away nuisance. The key overlap quantity is the ring--nuisance coherence
+\[
+\mu(g,\mathcal P)=\frac{\|\Pi_{\mathcal P}g\|}{\|g\|},
+\]
+where $\Pi_{\mathcal P}$ projects onto a nuisance subspace $\mathcal P$.
+
+The first lemma of that note showed that the gap between a direct amplitude readout and a nuisance-aware estimator is controlled by a term of the schematic form
+\[
+\mu(g,\mathcal P)\frac{\|p\|}{\|g\|},
+\]
+plus noise terms. The companion proposition then sharpened the story: because the modulus is nonlinear, contamination can distort extrema and oscillation spacing before it destroys identifiability. So the long-baseline amplitude picture can lose visual cleanliness before structured source separation truly fails.
+
+\section{Why provenance mattered}
+
+That first framework was deliberately abstract. The next step was to recognize that the nuisance does not come from an arbitrary comparison class in visibility space. It comes from escaping photons generated by ordinary geodesics.
+
+Let $z=(p,\xi)$ denote a photon initial condition, and write
+\[
+E = \{z:\gamma_z \text{ escapes}\},
+\qquad
+C = \{z:\gamma_z \text{ is captured}\}.
+\]
+Only $E$ contributes to the data. The provenance refinement then splits the escaping sector as
+\[
+E = E_{\mathrm{ring}} \,\dot\cup\, E_{\mathrm{bg}},
+\]
+where $E_{\mathrm{ring}}$ generates the photon-ring signal and $E_{\mathrm{bg}}$ generates the broader background. This constrains the nuisance to a provenance-restricted family
+\[
+Q_{\mathrm{prov}} = \{A_b h : h\in\mathcal A\},
+\]
+rather than an arbitrary abstract class. So the nuisance becomes smaller and more physical before any further theorem is even applied.
+
+\section{The geodesic-coherence advance}
+
+The third note [\hyperlink{ref-3}{3}] did more than merely say that provenance shrinks the nuisance class. Its main new theorem bounded the coherence itself. If $A_r$ and $A_b$ denote the ring and background transport operators, and if
+\[
+\|A_r f\|\ge \sigma_r\|f\|,
+\qquad
+\|A_b h\|\ge \sigma_b\|h\|,
+\]
+then for $g=A_r f_\theta$ one obtains
+\[
+\mu(g,Q_{\mathrm{prov}})
+\le
+\frac{\|A_b^*A_r\|}{\sigma_r\sigma_b}.
+\]
+If the operators admit a visibility kernel, this further becomes a cross-Gram integral over escaping geodesic families. Under a geometric separation assumption in a criticality index $\chi(z)$, the same note proves exponential coherence decay of the form
+\[
+\mu(g,Q_{\mathrm{prov}})
+\lesssim
+\frac{M}{\sigma_r\sigma_b}e^{-\beta\Delta}
+\sqrt{\nu(E_{\mathrm{ring}})\,\nu(E_{\mathrm{bg}})}.
+\]
+This is the point where the abstract overlap term from the first Fourier note becomes a quantitative geometric object.
+
+\section{What the subring note adds}
+
+The new subring-resolved note [\hyperlink{ref-4}{4}] addresses the remaining asymmetry. Up to that stage, the nuisance had been made more physical, but the signal was still treated as one structured ring template. The new step is to refine the ring itself into winding-order pieces:
+\[
+y = \sum_{n=1}^{N} \alpha_n g_{\theta,n} + q + \varepsilon.
+\]
+Under the simplest asymptotic closure,
+\[
+\alpha_n = \alpha_1 e^{-\gamma(n-1)},
+\]
+so the full ring template becomes an exponentially weighted tower
+\[
+g_\theta^{(\gamma,N)} = \sum_{n=1}^{N} e^{-\gamma(n-1)} g_{\theta,n}.
+\]
+This preserves the algebraic form of the original note,
+\[
+y = \alpha_1 g_\theta^{(\gamma,N)} + q + \varepsilon,
+\]
+while giving the signal explicit internal structure.
+
+The same note also refines provenance on the signal side by splitting
+\[
+E_{\mathrm{ring}} = \bigsqcup_{n=1}^{N} E_n,
+\]
+where $E_n$ is the family of escaping near-critical geodesics with winding order $n$, or with an $n$-indexed criticality surrogate. So the new picture is no longer “ring versus background” in a monolithic sense, but “a weighted hierarchy of subring families versus ordinary escaping background.”
+
+\section{New mathematical consequences}
+
+Two methodological gains come directly from the subring model.
+
+First, the aggregate ring--background coherence can be reduced to subring-wise terms. If
+\[
+\mu(g,Q_{\mathrm{prov}})
+:=
+\sup_{q\in Q_{\mathrm{prov}}\setminus\{0\}}
+\frac{|\langle g,q\rangle|}{\|g\|\,\|q\|},
+\]
+then the aggregate template obeys
+\[
+\mu\!\left(g_\theta^{(\gamma,N)},Q_{\mathrm{prov}}\right)
+\le
+\frac{\sum_{n=1}^{N} e^{-\gamma(n-1)}\|g_{\theta,n}\|\,\mu(g_{\theta,n},Q_{\mathrm{prov}})}{\|g_\theta^{(\gamma,N)}\|}.
+\]
+So the coherence of the full ring tower is controlled by a weighted combination of subring-specific overlaps. The higher-order pieces are already exponentially downweighted, and any additional geometric decoupling of those pieces from the background improves the aggregate coherence still further.
+
+Second, the infinite-order tower is finitely approximable. If the subring templates are uniformly bounded,
+\[
+\|g_{\theta,n}\|\le M_g,
+\]
+then the subring note proves the truncation estimate
+\[
+\left\|g_\theta^{(\gamma,\infty)} - g_\theta^{(\gamma,N)}\right\|
+\le
+\frac{M_g e^{-\gamma N}}{1-e^{-\gamma}}.
+\]
+So the first few winding classes capture the main signal, and the neglected tail is exponentially small. This is the practical reason the refined model remains usable as an inverse problem rather than turning into an intractable infinite hierarchy.
+
+\section{Overall methodological progression}
+
+The arc across the notes can now be stated very cleanly.
+
+\begin{itemize}
+\tightlist
+\item The first note [\hyperlink{ref-1}{1}] showed that heuristic readability and structured recoverability need not coincide.
+\item The provenance note [\hyperlink{ref-2}{2}] made the nuisance class smaller and more physical by restricting it to ordinary escaping geodesics.
+\item The geodesic-coherence note [\hyperlink{ref-3}{3}] bounded the resulting ring--background overlap by phase-space geometry.
+\item The new subring note [\hyperlink{ref-4}{4}] makes the signal side equally structured by resolving the ring into an exponentially weighted hierarchy of winding-order subrings.
+\end{itemize}
+
+So the methodology now treats \emph{both sides} of the inverse problem structurally. The nuisance is constrained by provenance; the signal is organized by winding order; the effective overlap is controlled by coherence bounds; and the signal hierarchy is finitely approximable because its tail decays geometrically. That is the main conceptual gain of the full program.
+
+\section{Physical picture and relation to BHEX}
+
+The BHEX vision is to use very long baselines to isolate a thin, more universal photon-ring signal from broader astrophysical emission [\hyperlink{ref-5}{5}, \hyperlink{ref-6}{6}, \hyperlink{ref-7}{7}]. The full mathematical arc now mirrors that physical picture more faithfully than the original abstraction alone. A broad background is treated as provenance-constrained nuisance; the ring itself is decomposed into winding-depth families; and the quality of structured separation is tied to the geometric decorrelation of those families after transport to visibility space.
+
+This remains an abstract framework rather than a forecast pipeline. To make it fully astrophysical, one would still need concrete emission families, concrete criticality surrogates, and ray-traced estimates of the relevant kernels and subring templates. But the important methodological change is already in place: the inference problem is now written in a form where those physically meaningful ingredients can enter one by one without changing the overall mathematical skeleton.
+
+\section{Key interesting points}
+
+\begin{itemize}
+\tightlist
+\item The full program now distinguishes readability from recoverability, provenance from generic nuisance, and subring hierarchy from a monolithic ring template.
+\item Provenance and geodesic geometry sharpen the nuisance side of the inverse problem.
+\item Subring resolution sharpens the signal side of the inverse problem.
+\item Aggregate coherence and finite truncation are the new mathematical mechanisms that make the refined signal model usable.
+\item The overall result is a cleaner bridge between BHEX-style strong-lensing intuition and structured Fourier-domain inference.
+\end{itemize}
+
+\section*{References}
+\addcontentsline{toc}{section}{References}
+
+\noindent{}\hypertarget{ref-1}{}{[}1{]} Jonathan R. Landers,
+\emph{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference}, 2026.
+
+\noindent{}\hypertarget{ref-2}{}{[}2{]} Jonathan R. Landers,
+\emph{Geodesic Provenance and Structured Source Separation for Photon-Ring Inference}, 2026.
+
+\noindent{}\hypertarget{ref-3}{}{[}3{]} Jonathan R. Landers,
+\emph{Geodesic-Provenance Coherence Bounds for Fourier-Domain Photon-Ring Inference}, 2026.
+
+\noindent{}\hypertarget{ref-4}{}{[}4{]} Jonathan R. Landers,
+\emph{Subring-Resolved Structured Separation for Fourier-Domain Photon-Ring Inference}, 2026.
+
+\noindent{}\hypertarget{ref-5}{}{[}5{]} Black Hole Explorer Collaboration,
+\emph{Black Hole Explorer: Motivation and Vision}, arXiv:2406.12917.
+\url{https://arxiv.org/abs/2406.12917}
+
+\noindent{}\hypertarget{ref-6}{}{[}6{]} Black Hole Explorer Collaboration,
+\emph{The Black Hole Explorer: Photon Ring Science, Detection and Shape Measurement},
+arXiv:2406.09498. \url{https://arxiv.org/abs/2406.09498}
+
+\noindent{}\hypertarget{ref-7}{}{[}7{]} Black Hole Explorer Collaboration,
+\emph{Interferometric Inference of Black Hole Spin from Photon Ring Size and Brightness},
+arXiv:2509.23628. \url{https://arxiv.org/abs/2509.23628}
+
+\end{document}

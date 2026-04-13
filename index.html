@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fourier-Domain Photon-Ring Inference with Geodesic-Coherence Refinement</title>
+  <title>Fourier-Domain Photon-Ring Inference with Provenance, Coherence, and Subring Refinements</title>
   <script>
     window.MathJax = { tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']], processEscapes: true }, svg: { fontCache: 'global' } };
   </script>
@@ -249,23 +249,26 @@
   </nav>
 
   <header class="wrap hero" id="overview">
-    <div class="kicker">Fourier-domain analysis + geodesic-coherence refinement</div>
+    <div class="kicker">Fourier-domain analysis + provenance + coherence + subring refinement</div>
     <h1>A Fourier-Domain Analysis of BHEX for Photon-Ring Inference</h1>
     <p class="muted" style="margin:-4px 0 6px; font-weight:600;">Jonathan R. Landers</p>
     <p class="small" style="margin:0 0 12px;">Independent researcher. This project is inspired by published BHEX work and is not affiliated with the BHEX collaboration or mission team.</p>
     <p class="subtitle">BHEX is motivated by the idea that sufficiently long interferometric baselines may isolate a thin, more universal photon-ring signal beneath brighter, broader plasma emission around a black hole.<sup class="cite"><a href="#ref-4">[4]</a></sup><sup class="cite"><a href="#ref-5">[5]</a></sup><sup class="cite"><a href="#ref-6">[6]</a></sup> That turns the inference problem into a separation problem: the ring carries the target geometric information, but the surrounding plasma can dominate the image and distort the visibility pattern that a direct amplitude heuristic tries to read.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-5">[5]</a></sup></p>
-    <p class="subtitle">At a high level, the project presented here turns the BHEX-motivated ring-versus-plasma question into a runnable synthetic Fourier-domain inference prototype, then sharpens its interpretation with later geometric theory. This page starts from the implemented Fourier-domain source-separation model in the first note and then adds the mathematical extensions from the geodesic-provenance note and the summary note. The simulations, estimator pipeline, and held-out results shown below come entirely from the first Fourier-domain paper.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup></p>
+    <p class="subtitle">At a high level, the project presented here turns the BHEX-motivated ring-versus-plasma question into a runnable synthetic Fourier-domain inference prototype, then sharpens its interpretation with later geometric theory. This page starts from the implemented Fourier-domain source-separation model in the first note and then adds the later provenance note, the coherence refinement, the subring-resolved signal extension, and the newer summary notes. The simulations, estimator pipeline, and held-out results shown below come entirely from the first Fourier-domain paper.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup><sup class="cite"><a href="#ref-7">[7]</a></sup><sup class="cite"><a href="#ref-8">[8]</a></sup></p>
     <div class="hero-links">
       <a class="hero-link" href="manuscript/fourier-domain-analysis-bhex.pdf" target="_blank" rel="noopener">Open Fourier Note</a>
-      <a class="hero-link" href="manuscript/geodesic_coherence_bhex_note.pdf" target="_blank" rel="noopener">Open Geodesic Note</a>
-      <a class="hero-link" href="manuscript/geodesic_coherence_summary_note_updated.pdf" target="_blank" rel="noopener">Open Summary Note</a>
+      <a class="hero-link" href="manuscript/geodesic_provenance_bhex_note.pdf" target="_blank" rel="noopener">Open Provenance Note</a>
+      <a class="hero-link" href="manuscript/geodesic_coherence_bhex_note.pdf" target="_blank" rel="noopener">Open Coherence Note</a>
+      <a class="hero-link" href="manuscript/geodesic_coherence_summary_note_updated.pdf" target="_blank" rel="noopener">Open Coherence Summary</a>
+      <a class="hero-link" href="manuscript/subring_resolved_bhex_note.pdf" target="_blank" rel="noopener">Open Subring Note</a>
+      <a class="hero-link" href="manuscript/subring_refinement_summary_note.pdf" target="_blank" rel="noopener">Open Full Summary</a>
     </div>
 
     <div class="hero-grid">
       <div class="glass hero-card">
         <h3 style="margin-top:0">Executive picture</h3>
-        <p>The Fourier-domain analysis shows that a long-baseline amplitude heuristic of the kind emphasized in the BHEX program can become hard to read cleanly before the photon ring itself becomes unrecoverable. The geodesic-coherence refinement asks what physically controls the key coherence term in that story and answers by lifting the nuisance model to photon initial-condition space, where ring-background overlap is bounded by the correlation of escaping geodesic families.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup></p>
-        <div class="callout">The scripts implement only the first paper's abstract Fourier-domain smooth-nuisance prototype. They do not implement the geodesic-provenance model from the second paper or any additional construction from the summary note.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup></div>
+        <p>The Fourier-domain analysis shows that a long-baseline amplitude heuristic of the kind emphasized in the BHEX program can become hard to read cleanly before the photon ring itself becomes unrecoverable. The provenance note first shrinks the nuisance side by restricting it to ordinary escaping geodesics, the geodesic-coherence note then asks what physically controls the remaining overlap and answers with a bound in terms of escaping geodesic correlations, and the later subring refinement removes the remaining signal-side asymmetry by replacing the monolithic ring template with an exponentially weighted tower of winding-order subrings.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-7">[7]</a></sup><sup class="cite"><a href="#ref-8">[8]</a></sup></p>
+        <div class="callout">The scripts implement only the first paper's abstract Fourier-domain smooth-nuisance prototype. They do not implement the provenance restriction, the coherence bound, the subring-resolved signal tower, or either summary note numerically.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-7">[7]</a></sup><sup class="cite"><a href="#ref-8">[8]</a></sup></div>
         <ul class="bullets">
           <li>Start from images, not abstract vectors.</li>
           <li>Push the images through a full Fourier visibility representation.</li>
@@ -296,13 +299,13 @@
         <div>
           <h2>Physical intuition</h2>
           <p>At the image level, the source contains a broad plasma structure and a thinner photon ring. The plasma dominates visual appearance, whereas the photon ring carries the target geometric information.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-5">[5]</a></sup><sup class="cite"><a href="#ref-6">[6]</a></sup></p>
-          <p>In Fourier space, this geometric distinction becomes a separation problem. Broad image features and thin oscillatory ring structure concentrate differently, so the first inference question is: <em>what fraction of the visibility is attributable to ring structure, and what fraction is attributable to structured nuisance?</em> The refinement then asks where that nuisance comes from physically and answers: from ordinary escaping geodesics rather than an arbitrary visibility-space contaminant.<sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup></p>
+          <p>In Fourier space, this geometric distinction becomes a separation problem. Broad image features and thin oscillatory ring structure concentrate differently, so the first inference question is: <em>what fraction of the visibility is attributable to ring structure, and what fraction is attributable to structured nuisance?</em> The provenance note then asks where that nuisance comes from physically and answers: from ordinary escaping geodesics rather than an arbitrary visibility-space contaminant. The coherence note asks how strongly that physically admissible nuisance can still overlap the ring and answers with a phase-space bound. The newer subring note asks for the same kind of structure on the signal side and answers: a weighted hierarchy of winding-order subrings rather than one monolithic ring template.<sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-7">[7]</a></sup><sup class="cite"><a href="#ref-8">[8]</a></sup></p>
           <div class="callout">The important conceptual shift is that this is not blind source separation. First it is a structured inverse problem in visibility space; then, in the refinement, it becomes a provenance-constrained separation problem in which the nuisance is restricted to the background escaping sector.</div>
         </div>
         <div class="glass panel">
           <h3 style="margin-top:0">Why the heuristic can lose readability early</h3>
           <p class="muted">A long-baseline amplitude heuristic, in the same spirit as the BHEX ring-shape methodology, is effectively trying to read the ring directly from the oscillatory pattern of $|y|$. That works when contamination is mild. But the modulus is nonlinear, so structured nuisance can shift peaks and spacing before the underlying ring is truly gone.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-5">[5]</a></sup></p>
-          <p class="muted">A fuller estimator is complementary in what it demands. It does not require the ring to be visually obvious in amplitude space. It only requires the ring to remain identifiable under the joint model. The geodesic-coherence extension sharpens this by proposing that identifiability should improve when ring-generating and background-generating escaping geodesics are dynamically well separated.<sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup></p>
+          <p class="muted">A fuller estimator is complementary in what it demands. It does not require the ring to be visually obvious in amplitude space. It only requires the ring to remain identifiable under the joint model. The provenance note makes that joint model more physical by shrinking the nuisance family, the geodesic-coherence extension sharpens it further by proposing that identifiability should improve when ring-generating and background-generating escaping geodesics are dynamically well separated, and the subring-resolved extension keeps that logic while replacing the signal by a low-dimensional weighted tower of winding-order pieces.<sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-7">[7]</a></sup></p>
         </div>
       </div>
     </section>
@@ -345,7 +348,7 @@
             + \frac{\|(I-\Pi_{\mathcal{P}})\varepsilon\|}{\|(I-\Pi_{\mathcal{P}})g\|}.
             $$
           </p>
-          <p class="muted">The heuristic-model gap increases with ring-plasma coherence, nuisance magnitude, and noise. The geodesic-provenance refinement interprets this coherence term more physically.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup></p>
+          <p class="muted">The heuristic-model gap increases with ring-plasma coherence, nuisance magnitude, and noise. The provenance note makes that overlap physically admissible, and the coherence note then controls it by geodesic geometry.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup></p>
         </div>
         <div class="glass panel equation-panel">
           <div class="eyebrow">Recoverability statement</div>
@@ -374,7 +377,7 @@
             g_{\theta}=A_r f_{\theta}, \quad q=A_b h.
             $$
           </p>
-          <p class="muted">The geodesic-coherence note lifts the nuisance model back to photon initial-condition space. Ring and background are the visibility-space images of distinct escaping geodesic families, not just abstract components in $\mathcal{H}$.<sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup></p>
+          <p class="muted">The provenance note lifts the nuisance model back to photon initial-condition space. Ring and background are the visibility-space images of distinct escaping geodesic families, not just abstract components in $\mathcal{H}$. The coherence note then builds quantitative bounds on top of that lift.<sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup></p>
         </div>
         <div class="glass math-card">
           <div class="eyebrow">Provenance-constrained coherence</div>
@@ -388,7 +391,7 @@
             Q_{\mathrm{prov}}=\{A_b h : h \in \mathcal{A}\}.
             $$
           </p>
-          <p class="muted">The overlap term is redefined over a physically admissible nuisance family generated by ordinary escaping geodesics.<sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup></p>
+          <p class="muted">The overlap term is redefined over a physically admissible nuisance family generated by ordinary escaping geodesics. This is the bridge from the provenance note to the later coherence bound.<sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup></p>
         </div>
       </div>
 
@@ -422,7 +425,36 @@
         </div>
       </div>
 
-      <div class="callout" style="margin-top:18px">Mathematically, the page tells a three-step story: Fourier-domain mismatch and recoverability, provenance lift to photon initial conditions, and a geometric corollary that links recoverability margin to separation of escaping photon families. The code shown below implements only the first paper's structured estimator with a smooth nuisance regularizer. The second note and the summary note appear here as mathematical extensions only.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup></div>
+      <div class="figure-grid-2" style="margin-top:22px">
+        <div class="glass math-card">
+          <div class="eyebrow">Subring-resolved signal model</div>
+          <p class="math-display">
+            $$
+            y = \sum_{n=1}^{N} \alpha_n g_{\theta,n} + q + \varepsilon,
+            \qquad
+            \alpha_n = \alpha_1 e^{-\gamma(n-1)}.
+            $$
+          </p>
+          <p class="muted">The later subring note keeps the same inverse-problem skeleton but resolves the signal side into winding-order pieces with exponentially decaying weights.<sup class="cite"><a href="#ref-7">[7]</a></sup><sup class="cite"><a href="#ref-8">[8]</a></sup></p>
+        </div>
+        <div class="glass math-card">
+          <div class="eyebrow">Aggregate template and truncation</div>
+          <p class="math-display">
+            $$
+            g_\theta^{(\gamma,N)}
+            =
+            \sum_{n=1}^{N} e^{-\gamma(n-1)} g_{\theta,n},
+            \qquad
+            \left\|g_\theta^{(\gamma,\infty)} - g_\theta^{(\gamma,N)}\right\|
+            \le
+            \frac{C e^{-\gamma N}}{1-e^{-\gamma}}.
+            $$
+          </p>
+          <p class="muted">Aggregate coherence becomes a weighted combination of subring-wise overlaps, and the infinite tower stays practically usable because the neglected tail is geometrically small.<sup class="cite"><a href="#ref-7">[7]</a></sup><sup class="cite"><a href="#ref-8">[8]</a></sup></p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:18px">Mathematically, the page now tells a four-step story: Fourier-domain mismatch and recoverability, provenance lift to photon initial conditions, geometric coherence control, and a subring-resolved signal hierarchy with controlled truncation. The code shown below implements only the first paper's structured estimator with a smooth nuisance regularizer. The later provenance, coherence, subring, and summary notes appear here as mathematical extensions only.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup><sup class="cite"><a href="#ref-7">[7]</a></sup><sup class="cite"><a href="#ref-8">[8]</a></sup></div>
     </section>
 
     <section id="prototype">
@@ -455,7 +487,7 @@
             <h3>How the scripts operationalize the estimator</h3>
             <p>The scripts instantiate the abstract nuisance regularizer with a concrete model: use a circular Gaussian ring template bank on the full FFT visibility plane and penalize high-frequency structure in the nuisance term. This drives the plasma estimate toward smoother Fourier behavior while preserving thin oscillatory ring structure in the explicit template family.</p>
             <p class="muted">For fixed $(\alpha,\theta)$, this yields a closed-form nuisance estimate, so a practical grid search over $\theta$ and $\lambda$ is feasible in the prototype.</p>
-            <p class="small">This estimator implements only the first paper's abstract Fourier-domain model with a smooth Fourier nuisance term. No script estimates $A_r$, $A_b$, the family $Q_{\mathrm{prov}}$, a criticality index, or the cross-Gram kernel, and nothing from the second or summary paper is implemented numerically.</p>
+            <p class="small">This estimator implements only the first paper's abstract Fourier-domain model with a smooth Fourier nuisance term. No script estimates $A_r$, $A_b$, the family $Q_{\mathrm{prov}}$, a criticality index, the cross-Gram kernel, or a subring-resolved signal hierarchy, and nothing from the later provenance, coherence, subring, or summary notes is implemented numerically.</p>
           </div>
           <div class="glass math-card prototype-formula">
             <div class="eyebrow">Prototype objective</div>
@@ -629,6 +661,7 @@
             <li>elliptical or spin-informed ring families instead of purely circular templates</li>
             <li>explicit baseline masks and more realistic visibility sampling</li>
             <li>provenance-constrained nuisance classes instead of purely smooth Fourier penalties</li>
+            <li>subring-resolved ring families with explicit winding-order weights</li>
             <li>cross-Gram or $A_b^*A_r$ estimates from ray tracing / simulation to evaluate coherence directly</li>
             <li>criticality indices that turn geometric separation into a computable recoverability diagnostic</li>
             <li>uncertainty bands or posterior summaries instead of point estimates only</li>
@@ -636,7 +669,7 @@
           </ul>
         </div>
       </div>
-      <div class="callout" style="margin-top:18px">Conceptual arc: heuristic readability can fail before recoverability, and the geodesic-coherence refinement says the size of that gap should be governed by how strongly ring-generating and background-generating escaping geodesics correlate in visibility space.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-3">[3]</a></sup><sup class="cite"><a href="#ref-5">[5]</a></sup></div>
+      <div class="callout" style="margin-top:18px">Conceptual arc: heuristic readability can fail before recoverability; the provenance note says nuisance should be constrained to ordinary escaping geodesics; the coherence note says the size of the remaining gap should be governed by how strongly ring-generating and background-generating escaping geodesics correlate in visibility space; and the later subring refinement says the signal itself should be organized into a winding-order hierarchy whose aggregate coherence and truncation are controlled.<sup class="cite"><a href="#ref-1">[1]</a></sup><sup class="cite"><a href="#ref-9">[9]</a></sup><sup class="cite"><a href="#ref-2">[2]</a></sup><sup class="cite"><a href="#ref-7">[7]</a></sup><sup class="cite"><a href="#ref-8">[8]</a></sup></div>
     </section>
 
     <section id="references">
@@ -649,6 +682,9 @@
           <li id="ref-4">Black Hole Explorer Collaboration, <em>Black Hole Explorer: Motivation and Vision</em>, arXiv:2406.12917. <a href="https://arxiv.org/abs/2406.12917">https://arxiv.org/abs/2406.12917</a></li>
           <li id="ref-5">Black Hole Explorer Collaboration, <em>The Black Hole Explorer: Photon Ring Science, Detection and Shape Measurement</em>, arXiv:2406.09498. <a href="https://arxiv.org/abs/2406.09498">https://arxiv.org/abs/2406.09498</a></li>
           <li id="ref-6">Black Hole Explorer Collaboration, <em>Interferometric Inference of Black Hole Spin from Photon Ring Size and Brightness</em>, arXiv:2509.23628. <a href="https://arxiv.org/abs/2509.23628">https://arxiv.org/abs/2509.23628</a></li>
+          <li id="ref-7">Jonathan R. Landers, <em>Subring-Resolved Structured Separation for Fourier-Domain Photon-Ring Inference</em>, 2026. <a href="manuscript/subring_resolved_bhex_note.pdf">manuscript/subring_resolved_bhex_note.pdf</a></li>
+          <li id="ref-8">Jonathan R. Landers, <em>A Summary of the Provenance-and-Subring Refinement for Fourier-Domain Photon-Ring Inference</em>, 2026. <a href="manuscript/subring_refinement_summary_note.pdf">manuscript/subring_refinement_summary_note.pdf</a></li>
+          <li id="ref-9">Jonathan R. Landers, <em>Geodesic Provenance and Structured Source Separation for Photon-Ring Inference</em>, 2026. <a href="manuscript/geodesic_provenance_bhex_note.pdf">manuscript/geodesic_provenance_bhex_note.pdf</a></li>
         </ol>
       </div>
     </section>

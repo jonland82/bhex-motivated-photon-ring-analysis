@@ -1,0 +1,306 @@
+\documentclass[10pt,letterpaper,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[top=0.76in,bottom=0.82in,left=0.72in,right=0.72in,columnsep=0.23in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+\setstretch{0.995}
+\setlength{\parindent}{0.9em}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{0.23in}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.2em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.3em,itemsep=0.2em,topsep=0.35em}
+\setlength{\abovedisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{5pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\belowdisplayshortskip}{4pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{7pt plus 2pt minus 2pt}
+\setlength{\intextsep}{7pt plus 2pt minus 2pt}
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom
+
+\definecolor{TitleRule}{HTML}{D9DEE7}
+\definecolor{TitleNote}{HTML}{4B5563}
+\definecolor{HeadingInk}{HTML}{1F2937}
+\definecolor{HeadingRule}{HTML}{CBD5E1}
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\setcounter{secnumdepth}{2}
+
+\titleformat{\section}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {\thesection}
+  {0.65em}
+  {}
+\titleformat{name=\section,numberless}
+  {\large\sffamily\bfseries\color{HeadingInk}}
+  {}
+  {0pt}
+  {}
+\titleformat{\subsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsection}
+  {0.55em}
+  {}
+\titleformat{\subsubsection}
+  {\normalsize\sffamily\bfseries\color{HeadingInk}}
+  {\thesubsubsection}
+  {0.5em}
+  {}
+\titlespacing*{\section}{0pt}{0.95em}{0.35em}
+\titlespacing*{\subsection}{0pt}{0.75em}{0.25em}
+\titlespacing*{\subsubsection}{0pt}{0.55em}{0.2em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\title{Geodesic Provenance and Structured Source Separation for Photon-Ring Inference}
+\author{Jonathan R. Landers}
+\date{}
+
+\newcommand{\affiliationnote}{Independent researcher.\\
+This note extends the Fourier-domain BHEX analysis in \cite{LandersFourierBHEX} and is inspired by published BHEX work; it is not affiliated with the BHEX collaboration or mission team.}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \twocolumn[{%
+    \begin{@twocolumnfalse}
+      \vspace*{-1.3em}
+      {\LARGE\sffamily\bfseries\raggedright \@title \par}
+      \vspace{0.35em}
+      {\normalsize\sffamily\raggedright \@author \par}
+      \vspace{0.16em}
+      {\small\color{TitleNote}\raggedright \affiliationnote \par}
+      \vspace{0.65em}
+      {\color{TitleRule}\hrule height 0.8pt}
+      \vspace{0.8em}
+    \end{@twocolumnfalse}
+  }]
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+In a companion note, \emph{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference} \cite{LandersFourierBHEX}, we proposed a structured source-separation framework for interferometric photon-ring inference motivated by the BHEX visibility program \cite{BHEXVision,BHEXDetection}. The central model took the form
+\[
+y = \alpha g_\theta + q + \varepsilon,
+\]
+where $g_\theta$ is a photon-ring visibility family, $q$ is structured nuisance, and $\varepsilon$ is noise. The purpose of the present note is to refine that model by adding \emph{geodesic provenance}: observed photons arise only from initial conditions whose null geodesics escape to the observer, while the complementary set is captured by the black hole and never contributes to the data.
+
+The mathematical point is simple. The inverse problem itself does not change, but the nuisance class becomes smaller and more physical. This sharpened provenance-aware formulation leads naturally to improved coherence, mismatch, and stability statements, while remaining close in spirit to the original BHEX-inspired formalism \cite{LandersFourierBHEX,BHEXDetection,BHEXSpin}.
+
+\section{Original formalism and provenance extension}
+
+The original visibility-space model is
+\[
+y = \alpha g_\theta + q + \varepsilon.
+\]
+Here $g_\theta$ is the structured photon-ring component, $q$ is nuisance structure such as broader plasma emission, and $\varepsilon$ is noise. In the companion note, this supported both a heuristic ring-oriented estimator and a structured estimator obtained by jointly fitting the ring and nuisance components \cite{LandersFourierBHEX}.
+
+We now add geodesic provenance. Let
+\[
+z=(p,\xi)
+\]
+denote a photon initial condition, where $p$ is an emission event and $\xi$ is a null direction. Let $\gamma_z$ be the resulting null geodesic. Define the escape and capture sets
+\[
+E = \{z:\gamma_z \text{ escapes}\},
+\qquad
+C = \{z:\gamma_z \text{ is captured}\}.
+\]
+Only $E$ contributes to observed data. If $f(z)$ is an emission distribution over initial conditions, then the observed image may be written as
+\[
+I = T_E f,
+\]
+where $T_E$ is the pushforward map from escaping geodesics to image-plane intensity. The measured visibility is therefore
+\[
+y = \mathcal F(T_E f) + \varepsilon,
+\]
+with $\mathcal F$ the image-to-visibility map.
+
+The refinement comes from splitting the escape set as
+\[
+E = E_{\mathrm{ring}} \,\dot\cup\, E_{\mathrm{bg}},
+\]
+where $E_{\mathrm{ring}}$ denotes near-critical escaping geodesics that generate the photon ring and $E_{\mathrm{bg}}$ denotes the remaining escaping geodesics. Then
+\[
+T_E f = T_{E_{\mathrm{ring}}}f + T_{E_{\mathrm{bg}}}f.
+\]
+Writing
+\[
+h_\theta := T_{E_{\mathrm{ring}}}f_\theta,
+\qquad
+b := T_{E_{\mathrm{bg}}}f,
+\]
+we obtain in image space
+\[
+I = \alpha h_\theta + b,
+\]
+and after Fourier transform
+\[
+g_\theta := \mathcal F h_\theta,
+\qquad
+q := \mathcal F b,
+\]
+so that the visibility model again becomes
+\[
+y = \alpha g_\theta + q + \varepsilon.
+\]
+Thus the algebraic form is unchanged, but now both signal and nuisance are tagged by geodesic provenance.
+
+\section{Provenance-constrained nuisance classes}
+
+In the companion note, nuisance was modeled abstractly through a subspace or comparison class such as $\mathcal P$ or $Q$ \cite{LandersFourierBHEX}. Here we refine that class by requiring nuisance to arise from non-ring escaping geodesics only. Given an admissible emission family $\mathcal A$, define
+\[
+Q_{\mathrm{prov}}
+:=
+\bigl\{\mathcal F T_{E_{\mathrm{bg}}}f : f\in\mathcal A\bigr\}.
+\]
+Likewise, if $\mathcal P$ denotes the original nuisance subspace in the simpler projection formulation, we write $\mathcal P_{\mathrm{prov}}\subseteq\mathcal P$ for its provenance-restricted analogue.
+
+The physical content is that captured photons never appear in the data, and nuisance can no longer be arbitrary; it must be generated by ordinary escaping geodesics. This is precisely the kind of sharpening suggested by the BHEX perspective, where the photon-ring contribution comes from a distinguished family of strongly lensed trajectories and is separated from broader astrophysical emission by its geometric origin \cite{BHEXDetection,BHEXSpin}.
+
+\section{Coherence improvement under provenance restriction}
+
+In the companion note, one key quantity is the ring--nuisance coherence
+\[
+\mu(g,\mathcal P)=\frac{\|\Pi_{\mathcal P}g\|}{\|g\|},
+\]
+where $\Pi_{\mathcal P}$ denotes orthogonal projection onto the nuisance subspace \cite{LandersFourierBHEX}. Provenance restriction improves this quantity immediately.
+
+\par\smallskip\noindent\textbf{Theorem (Monotonicity of coherence under provenance restriction).} Let $\mathcal P_{\mathrm{prov}}\subseteq\mathcal P$ be closed subspaces of the ambient Hilbert space $\mathcal H$, and let $g\in\mathcal H$ be nonzero. Then
+\[
+\mu(g,\mathcal P_{\mathrm{prov}})\le \mu(g,\mathcal P).
+\]
+Consequently, restricting nuisance to a provenance-constrained class cannot increase worst-case ring--nuisance overlap.
+
+\par\smallskip\noindent\textbf{Proof.} Since $\mathcal P_{\mathrm{prov}}\subseteq\mathcal P$, orthogonal projection onto $\mathcal P$ gives the best approximation to $g$ from the larger set, while projection onto $\mathcal P_{\mathrm{prov}}$ gives the best approximation from the smaller set. Hence
+\[
+\|\Pi_{\mathcal P_{\mathrm{prov}}}g\|\le \|\Pi_{\mathcal P}g\|.
+\]
+Dividing by $\|g\|$ yields the result.
+
+\par\smallskip\noindent\textbf{Corollary.} Any mismatch or stability bound from the companion note controlled by $\mu(g,\mathcal P)$ improves, or at worst remains unchanged, after replacing $\mathcal P$ by $\mathcal P_{\mathrm{prov}}$.
+
+\par\smallskip\noindent\textbf{Equivalent $Q$-formulation.} In the full source-separation model, if ring--nuisance coherence is measured over an admissible nuisance family $Q$ by
+\[
+\mu(g,Q):=\sup_{q\in Q\setminus\{0\}} \frac{|\langle g,q\rangle|}{\|g\|\,\|q\|},
+\]
+and if provenance restriction yields a smaller admissible family $Q_{\mathrm{prov}}\subseteq Q$, then
+\[
+\mu(g,Q_{\mathrm{prov}})\le \mu(g,Q).
+\]
+The proof is immediate, since the supremum is taken over a smaller set. Thus the same monotonicity holds whether coherence is expressed through projection onto a nuisance subspace or directly over an admissible nuisance class.
+
+\section{Refined mismatch statement}
+
+The companion note proved a mismatch bound between a direct ring-oriented heuristic and a nuisance-aware estimator, controlled by nuisance size, ring--nuisance coherence, and noise \cite{LandersFourierBHEX}. Replacing the original nuisance class by its provenance-restricted version yields the immediate refinement below.
+
+\par\smallskip\noindent\textbf{Lemma (Provenance-refined mismatch).} In the projection-based setting of \cite{LandersFourierBHEX}, replacing $\mathcal P$ by $\mathcal P_{\mathrm{prov}}$ gives
+\[
+\bigl|\hat\alpha_{\mathrm{heur}}-\hat\alpha_{\mathrm{model}}\bigr|
+\le
+\mu(g,\mathcal P_{\mathrm{prov}})\frac{\|p\|}{\|g\|}
++
+\frac{\|\varepsilon\|}{\|g\|}
++
+\frac{\|(I-\Pi_{\mathcal P_{\mathrm{prov}}})\varepsilon\|}{\|(I-\Pi_{\mathcal P_{\mathrm{prov}}})g\|}.
+\]
+Because $\mu(g,\mathcal P_{\mathrm{prov}})\le \mu(g,\mathcal P)$, this is sharper than the original bound.
+
+The interpretation is simple: the heuristic is not distorted by arbitrary nuisance, only by nuisance that can arise from ordinary escaping geodesics and still overlap the ring template.
+
+\section{Near-critical refinement}
+
+Not all provenance-constrained nuisance is equally harmful. Split the background escape set as
+\[
+E_{\mathrm{bg}} = E_{\mathrm{near}}\,\dot\cup\,E_{\mathrm{far}},
+\]
+where $E_{\mathrm{near}}$ consists of escaping background geodesics whose Fourier signatures overlap the oscillatory ring regime, and $E_{\mathrm{far}}$ consists of the remainder. Then
+\[
+q=q_{\mathrm{near}}+q_{\mathrm{far}}.
+\]
+In this formulation, the dominant mismatch term is governed more precisely by
+\[
+\mu(g,Q_{\mathrm{near}})\frac{\|q_{\mathrm{near}}\|}{\|g\|},
+\]
+rather than by the full nuisance norm. Thus the direct heuristic is destabilized specifically by near-critical contamination, not by all escaping background emission.
+
+\section{Refined identifiability and stability}
+
+The companion note also argued that heuristic readability can fail before true recoverability is lost, and expressed structured recovery through a local identifiability margin \cite{LandersFourierBHEX}. Provenance restriction sharpens that margin by shrinking the admissible nuisance family. Define the provenance-aware identifiability constant by
+\[
+c_{\mathrm{prov}}
+:=
+\inf_{q,q'\in Q_{\mathrm{prov}}}
+\frac{\|\alpha g_\theta + q - \alpha' g_{\theta'} - q'\|}
+{|\alpha-\alpha'| + d(\theta,\theta') + \|q-q'\|}.
+\]
+Since $Q_{\mathrm{prov}}\subseteq Q$, one has
+\[
+c_{\mathrm{prov}}\ge c,
+\]
+where $c$ is the original identifiability margin.
+
+\par\smallskip\noindent\textbf{Proposition (Provenance-improved stability).} Under the provenance-constrained model,
+\[
+|\hat\alpha-\alpha| + d(\hat\theta,\theta) + \|\hat q-q\|
+\le
+\frac{C}{c_{\mathrm{prov}}}\eta,
+\qquad c_{\mathrm{prov}}\ge c.
+\]
+Thus restricting nuisance to physically admissible escaping trajectories strengthens the recoverability guarantee.
+
+\section{Discussion}
+
+This extension leaves the inverse problem in the same formal shape as before, but gives it a sharper physical interpretation:
+\[
+\text{observed signal} = \text{near-critical escaping flow} + 
+\]
+\[
+\text{ordinary escaping flow} + \text{noise}.
+\]
+From the BHEX viewpoint, this is natural. The long-baseline ring observable is associated with a special class of strongly lensed trajectories, while the broader plasma contribution comes from other escaping emission \cite{BHEXVision,BHEXDetection,BHEXSpin}. The present note simply folds that physical distinction into the abstract source-separation formalism of \cite{LandersFourierBHEX}.
+
+The payoff is mathematical as well as conceptual. Provenance shrinks the nuisance family, lowers coherence, sharpens mismatch bounds, and improves identifiability. In that sense, it provides a clean bridge between the abstract Fourier-domain analysis of the companion note and the geodesic picture underlying BHEX-style photon-ring inference.
+
+\begin{thebibliography}{9}
+
+\bibitem{LandersFourierBHEX}
+Jonathan R. Landers,
+\emph{A Fourier-Domain Analysis of BHEX for Photon-Ring Inference}, 2026.
+
+\bibitem{BHEXVision}
+Black Hole Explorer Collaboration,
+\emph{Black Hole Explorer: Motivation and Vision}, 2024.
+
+\bibitem{BHEXDetection}
+Black Hole Explorer Collaboration,
+\emph{Photon Ring Science, Detection, and Shape Measurement}, 2024.
+
+\bibitem{BHEXSpin}
+Black Hole Explorer Collaboration,
+\emph{Interferometric Inference of Black Hole Spin from Photon Ring Size and Brightness}, 2025.
+
+\end{thebibliography}
+
+\end{document}

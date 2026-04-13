@@ -6,7 +6,7 @@
 
 The Black Hole Explorer (BHEX) mission is motivated by the idea that sufficiently long interferometric baselines may isolate a thin, more universal photon-ring signal beneath brighter, broader plasma emission around a black hole. This repository takes that BHEX-motivated ring-versus-plasma separation problem and turns it into a deliberately scoped synthetic Fourier-domain prototype whose purpose is methodological clarity, communication, and a concrete test of when a structured estimator can still recover the ring after a direct amplitude heuristic becomes hard to read.
 
-Presented within are three short manuscript notes, a standalone HTML presentation, and a three-stage Python prototype for a Fourier-domain photon-ring inference workflow inspired by the Black Hole Explorer (BHEX) program.
+Presented within are six short manuscript notes, a standalone HTML presentation, and a three-stage Python prototype for a Fourier-domain photon-ring inference workflow inspired by the Black Hole Explorer (BHEX) program.
 
 The motivating idea is simple:
 
@@ -16,11 +16,11 @@ The motivating idea is simple:
 
 The repository makes that story concrete with synthetic images, Fourier-domain fitting, hyperparameter tuning, and held-out reconstruction.
 
-The Python scripts implement only the first, abstract Fourier-domain note. The later geodesic-coherence note and the summary note extend the mathematics, but are not implemented numerically in the prototype.
+The Python scripts implement only the first, abstract Fourier-domain note. The later provenance, coherence, subring, and summary notes extend the mathematics, but are not implemented numerically in the prototype.
 
 It is a research prototype designed for methodological clarity and communication, not a mission-grade astrophysical pipeline.
 
-For the quickest overview, start with the GitHub Pages site or [index.html](index.html), then read [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf), [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf), and [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf), then inspect the scripts in `simulation/`.
+For the quickest overview, start with the GitHub Pages site or [index.html](index.html), then read [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf), [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf), [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf), [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf), [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf), and [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf), then inspect the scripts in `simulation/`.
 
 At the center of the prototype is a simple decomposition of the observed visibility:
 
@@ -32,16 +32,22 @@ where $g_{\theta}$ is a ring template, $\alpha$ is its strength, $q$ is structur
 
 ## Repository contents and scope
 
-This repository combines three notes, a browser presentation, and a runnable prototype around one BHEX-motivated claim: a direct amplitude heuristic based on $|y|$ can become hard to read before a structured estimator loses the ability to recover the ring.
+This repository combines six notes, a browser presentation, and a runnable prototype around one BHEX-motivated claim: a direct amplitude heuristic based on $|y|$ can become hard to read before a structured estimator loses the ability to recover the ring.
 
 - [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf)
   - the first note, which states the central Fourier-domain mismatch and recoverability argument
+- [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf)
+  - the second note, which lifts the nuisance model to photon initial-condition space and restricts nuisance to ordinary escaping geodesics
 - [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf)
-  - the second note, which lifts the nuisance model to photon initial-condition space and proves provenance-based coherence bounds
+  - the third note, which turns provenance into an explicit coherence bound over escaping geodesic families
 - [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf)
-  - the summary note, which records the mathematical arc across the first two notes
+  - the earlier summary note, which records the earlier coherence-focused arc
+- [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf)
+  - the subring-resolved extension, which replaces the monolithic ring template by an exponentially weighted hierarchy of winding-order subrings
+- [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf)
+  - the newer summary note, which records the now symmetric provenance-and-subring refinement arc
 - [index.html](index.html)
-  - a self-contained presentation of the implemented prototype together with the later mathematical extensions
+  - a self-contained presentation of the implemented prototype together with the later provenance, coherence, and subring mathematical extensions
 - `manuscript/`
   - the LaTeX source for the notes and related manuscript files
 - [simulation/01_generate_synthetic_bhex_images.py](simulation/01_generate_synthetic_bhex_images.py)
@@ -63,15 +69,20 @@ In the runnable code, that nuisance class is implemented as a smooth Fourier pen
 
 ## Main mathematical contributions
 
-Across the three notes, the repository contributes a compact mathematical framing:
+Across the six notes, the repository contributes a compact mathematical framing:
 
 - the first note gives a mismatch comparison between a direct amplitude heuristic and a plasma-aware estimator
 - the first note identifies the key controls on that gap: ring-plasma overlap, nuisance strength, and noise
 - the first note argues that heuristic readability can fail before structured recoverability fails
-- the second note lifts the nuisance model to photon initial-condition space and defines provenance-constrained coherence
-- the second note bounds that coherence by $\|A_b^*A_r\|/(\sigma_r\sigma_b)$ and then by a cross-Gram integral over escaping geodesic families
-- the second note derives a geometric separation corollary in which coherence decays exponentially with a criticality gap
-- the summary note records that arc in one place and clarifies how the geodesic refinement sharpens the original Fourier-domain story
+- the second note lifts the nuisance model to photon initial-condition space and replaces abstract nuisance by a provenance-constrained family generated by ordinary escaping geodesics
+- the second note shows that provenance restriction can only improve, or at worst preserve, the relevant overlap and mismatch terms
+- the third note bounds provenance-constrained coherence by $\|A_b^*A_r\|/(\sigma_r\sigma_b)$ and then by a cross-Gram integral over escaping geodesic families
+- the third note derives a geometric separation corollary in which coherence decays exponentially with a criticality gap
+- the earlier summary note records that arc in one place and clarifies how the geodesic refinement sharpens the original Fourier-domain story
+- the subring note refines the signal side into an exponentially weighted hierarchy of winding-order subrings without changing the inverse-problem skeleton
+- the subring note shows that aggregate ring-background coherence is controlled by a weighted combination of subring-specific coherence terms
+- the subring note proves a finite truncation bound, so the infinite subring tower remains practically approximable
+- the newer summary note records the full provenance-and-subring arc and makes the resulting signal-versus-nuisance symmetry explicit
 
 ## Requirements
 
@@ -264,10 +275,15 @@ If you want the repository in the order of highest payoff, inspect these in orde
 
 1. [index.html](index.html) for the high-level story and figures
 2. [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf) for the compact conceptual argument
-3. [bhex_model_tuning/tuned_model.json](bhex_model_tuning/tuned_model.json) after a run
-4. [bhex_model_tuning/heatmap_radius_mae.png](bhex_model_tuning/heatmap_radius_mae.png)
-5. [bhex_holdout_results/holdout_predictions.csv](bhex_holdout_results/holdout_predictions.csv)
-6. several `bhex_holdout_results/*_ring_emphasized.png` images
+3. [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf) for the provenance restriction
+4. [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf) for the explicit coherence bound
+5. [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf) for the earlier summary of that arc
+6. [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf) for the winding-order signal refinement
+7. [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf) for the full summary across the notes
+8. [bhex_model_tuning/tuned_model.json](bhex_model_tuning/tuned_model.json) after a run
+9. [bhex_model_tuning/heatmap_radius_mae.png](bhex_model_tuning/heatmap_radius_mae.png)
+10. [bhex_holdout_results/holdout_predictions.csv](bhex_holdout_results/holdout_predictions.csv)
+11. several `bhex_holdout_results/*_ring_emphasized.png` images
 
 The emphasized PNGs are especially useful because they show whether the recovered ring looks like a coherent thin structure rather than a broad halo.
 
@@ -281,7 +297,7 @@ This prototype is intentionally narrow. It currently uses:
 - a smoothness penalty for nuisance structure instead of a provenance-constrained or ray-tracing-informed nuisance family
 - point estimates and simple confidence scores rather than full uncertainty quantification
 
-It does not currently estimate provenance operators $A_r$ or $A_b$, a provenance-constrained nuisance family $Q_{\mathrm{prov}}$, a criticality index, or a cross-Gram kernel. Those belong to the later mathematical notes, not to the present Python implementation.
+It does not currently estimate provenance operators $A_r$ or $A_b$, a provenance-constrained nuisance family $Q_{\mathrm{prov}}$, a criticality index, a cross-Gram kernel, or a subring-resolved signal tower. Those belong to the later mathematical notes, not to the present Python implementation.
 
 That scope is a feature, not a bug. The goal is to isolate the estimation mechanism clearly before adding astrophysical realism.
 
@@ -291,6 +307,7 @@ Natural upgrades, also reflected in the HTML presentation, include:
 - explicit baseline masks and more realistic visibility sampling
 - provenance-constrained nuisance classes
 - cross-Gram or $A_b^*A_r$ estimates from ray tracing or simulation
+- subring-resolved ring families with explicit winding-order weights
 - criticality indices that turn geometric separation into a computable recoverability diagnostic
 - posterior summaries or uncertainty bands
 - confidence diagnostics tied more directly to recoverability margins
@@ -311,4 +328,4 @@ It starts from the physical picture of a thin photon ring embedded in broader pl
 
 can a ring-aware estimator still recover the geometry after a simple long-baseline readout has become hard to interpret?
 
-The first note argues yes in principle. The scripts show one concrete toy implementation of that first-note argument, while the later notes extend the mathematics beyond what is currently implemented.
+The first note argues yes in principle. The scripts show one concrete toy implementation of that first-note argument, while the later notes extend the mathematics to provenance, coherence, subring hierarchy, and summary-level synthesis beyond what is currently implemented.
