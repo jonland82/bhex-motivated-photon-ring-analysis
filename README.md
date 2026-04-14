@@ -1,108 +1,146 @@
 # BHEX-Motivated Photon Ring Analysis
 
-[Live site](https://jonland82.github.io/bhex-motivated-photon-ring-analysis/)
+[Live site](https://jonland82.github.io/bhex-motivated-photon-ring-analysis/)  
+[Standalone coherence + subring report](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html)
 
 *Jonathan R. Landers, independent researcher. This project is inspired by published BHEX work and is not affiliated with the BHEX collaboration or mission team.*
 
-The Black Hole Explorer (BHEX) mission is motivated by the idea that sufficiently long interferometric baselines may isolate a thin, more universal photon-ring signal beneath brighter, broader plasma emission around a black hole. This repository takes that BHEX-motivated ring-versus-plasma separation problem and turns it into a deliberately scoped synthetic Fourier-domain prototype whose purpose is methodological clarity, communication, and a concrete test of when a structured estimator can still recover the ring after a direct amplitude heuristic becomes hard to read.
+This repository studies one BHEX-motivated inverse problem in two deliberately separate steps.
 
-Presented within are six short manuscript notes, a standalone HTML presentation, and a three-stage Python prototype for a Fourier-domain photon-ring inference workflow inspired by the Black Hole Explorer (BHEX) program.
+The physical picture is a thin photon ring sitting inside brighter, broader plasma emission. A simple long-baseline amplitude heuristic can become hard to read once plasma contamination distorts the visibility pattern. A structured estimator can still recover the ring if the ring remains distinguishable from the nuisance component.
 
-The motivating idea is simple:
+The repository first turns that idea into a compact Fourier-domain prototype. It then adds a second, separate synthetic validation suite designed specifically for the later geodesic-coherence and subring-resolved mathematics. The split is intentional:
 
-- the image contains a broad, messy plasma component and a much thinner photon ring
-- a direct long-baseline heuristic can become hard to read once plasma contamination distorts the visibility pattern
-- a structured estimator can still recover the ring if the ring remains distinguishable from the nuisance component
+- the original baseline experiment stays unchanged
+- the later mathematics gets its own dataset with the latent structure it actually needs
+- the repo remains reproducible end to end
 
-The repository makes that story concrete with synthetic images, Fourier-domain fitting, hyperparameter tuning, and held-out reconstruction.
+At a high level, the project now contains:
 
-The Python scripts implement only the first, abstract Fourier-domain note. The later provenance, coherence, subring, and summary notes extend the mathematics, but are not implemented numerically in the prototype.
+- six short manuscript notes in [manuscript/](manuscript)
+- the main GitHub Pages landing page in [index.html](index.html)
+- the original runnable prototype in [simulation/](simulation)
+- a separate coherence + subring validation suite in [coherence_subring_validation/](coherence_subring_validation)
 
-It is a research prototype designed for methodological clarity and communication, not a mission-grade astrophysical pipeline.
+## Intuition
 
-For the quickest overview, start with the GitHub Pages site or [index.html](index.html), then read [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf), [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf), [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf), [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf), [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf), and [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf), then inspect the scripts in `simulation/`.
+The narrative arc is:
 
-At the center of the prototype is a simple decomposition of the observed visibility:
+1. Start with a toy but explicit observation model in Fourier space.
+2. Show that structured recoverability can persist after direct heuristic readability starts to degrade.
+3. Refine the nuisance side with provenance and coherence language.
+4. Refine the signal side with a hierarchy of winding-order subrings.
+5. Validate those later refinements in a second synthetic benchmark instead of forcing them into the original prototype.
+
+That gives the repo two complementary experiment tracks:
+
+- `simulation/` validates the original ring-versus-plasma estimation argument.
+- `coherence_subring_validation/` validates the later coherence and subring claims in a controlled synthetic setting.
+
+## Mathematical skeleton
+
+The baseline note starts from the visibility decomposition
 
 $$
 y = \alpha g_{\theta} + q + \varepsilon,
 $$
 
-where $g_{\theta}$ is a ring template, $\alpha$ is its strength, $q$ is structured nuisance from the plasma, and $\varepsilon$ is noise.
+where $g_{\theta}$ is a ring template, $\alpha$ is its strength, $q$ is structured nuisance, and $\varepsilon$ is noise.
 
-## Repository contents and scope
+The prototype estimator fits
 
-This repository combines six notes, a browser presentation, and a runnable prototype around one BHEX-motivated claim: a direct amplitude heuristic based on $|y|$ can become hard to read before a structured estimator loses the ability to recover the ring.
+$$
+(\hat{\alpha}, \hat{\theta}, \hat{q})
+=
+\arg\min_{\alpha,\theta,q}
+\left\| y - \alpha g_{\theta} - q \right\|^2
++
+\lambda \left\| Hq \right\|^2,
+$$
 
-- [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf)
-  - the first note, which states the central Fourier-domain mismatch and recoverability argument
-- [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf)
-  - the second note, which lifts the nuisance model to photon initial-condition space and restricts nuisance to ordinary escaping geodesics
-- [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf)
-  - the third note, which turns provenance into an explicit coherence bound over escaping geodesic families
-- [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf)
-  - the earlier summary note, which records the earlier coherence-focused arc
-- [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf)
-  - the subring-resolved extension, which replaces the monolithic ring template by an exponentially weighted hierarchy of winding-order subrings
-- [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf)
-  - the newer summary note, which records the now symmetric provenance-and-subring refinement arc
+so the ring is modeled explicitly while the nuisance term is penalized if it carries too much high-frequency structure.
+
+The later provenance/coherence notes refine the nuisance side. In the abstract, the relevant overlap is
+
+$$
+\mu(g,q) = \frac{|\langle g, q \rangle|}{\|g\| \, \|q\|},
+$$
+
+and the geodesic-provenance framework argues that restricting nuisance to ordinary escaping trajectories should reduce, or at worst preserve, the harmful overlap. The coherence note then bounds that overlap by operator geometry, schematically through quantities of the form
+
+$$
+\mu_{\mathrm{prov}} \lesssim \frac{\|A_b^* A_r\|}{\sigma_r \sigma_b}.
+$$
+
+The subring note refines the signal side instead of the nuisance side:
+
+$$
+y = \sum_{n \ge 1} \alpha_n g_{\theta,n} + q + \varepsilon,
+\qquad
+\alpha_n = \alpha_1 e^{-\gamma (n-1)}.
+$$
+
+That note proves two practical points:
+
+- aggregate ring-background coherence is controlled by a weighted combination of subring-level coherence terms
+- the infinite tower is approximable because the neglected tail decays geometrically, with a bound of the form
+
+$$
+\left\| \sum_{n > N} \alpha_n g_n \right\|
+\le
+\frac{\alpha_1 c_{\max} e^{-\gamma N}}{1 - e^{-\gamma}}.
+$$
+
+The repository now reflects that mathematical arc directly: the first experiment implements the first equation set, while the second experiment instantiates the coherence and subring formulas in a separate synthetic benchmark.
+
+## Repository map
+
 - [index.html](index.html)
-  - a self-contained presentation of the implemented prototype together with the later provenance, coherence, and subring mathematical extensions
-- `manuscript/`
-  - the LaTeX source for the notes and related manuscript files
+  - the main project narrative and landing page for GitHub Pages
+- [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf)
+  - the original Fourier-domain mismatch and recoverability note
+- [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf)
+  - provenance-constrained nuisance refinement
+- [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf)
+  - explicit coherence bounds and criticality-gap framing
+- [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf)
+  - subring-resolved signal model and finite truncation
+- [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf)
+  - summary of the provenance-and-subring refinement arc
+- [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf)
+  - earlier coherence-focused summary note
 - [simulation/01_generate_synthetic_bhex_images.py](simulation/01_generate_synthetic_bhex_images.py)
-  - generates synthetic images with a thin ring, broader plasma, blur, and noise
+  - baseline dataset generator
 - [simulation/02_tune_bhex_estimator.py](simulation/02_tune_bhex_estimator.py)
-  - fits a Fourier-domain estimator with explicit ring templates $g_{\theta}$ and nuisance term $q$
+  - baseline estimator tuning
 - [simulation/03_run_bhex_estimator_on_holdout.py](simulation/03_run_bhex_estimator_on_holdout.py)
-  - applies the tuned model to held-out images and exports reconstructed ring/plasma diagnostics
-
-Together, these pieces form one deliberately scoped workflow:
-
-1. Generate synthetic black-hole-like images with a thin ring, a broader crescent-like plasma component, blur, and noise.
-2. Transform those images into Fourier space and fit a ring-aware estimator that treats the plasma as structured nuisance.
-3. Bring the recovered components back into image space and create ring-emphasized visualizations for inspection.
-
-This is not blind source separation. The ring is modeled explicitly as a template family $g_{\theta}$, while the plasma is pushed into a smoother nuisance class $q$.
-
-In the runnable code, that nuisance class is implemented as a smooth Fourier penalty on the full FFT visibility plane. The provenance-constrained nuisance classes and cross-Gram bounds from the later notes remain mathematical extensions only.
-
-## Main mathematical contributions
-
-Across the six notes, the repository contributes a compact mathematical framing:
-
-- the first note gives a mismatch comparison between a direct amplitude heuristic and a plasma-aware estimator
-- the first note identifies the key controls on that gap: ring-plasma overlap, nuisance strength, and noise
-- the first note argues that heuristic readability can fail before structured recoverability fails
-- the second note lifts the nuisance model to photon initial-condition space and replaces abstract nuisance by a provenance-constrained family generated by ordinary escaping geodesics
-- the second note shows that provenance restriction can only improve, or at worst preserve, the relevant overlap and mismatch terms
-- the third note bounds provenance-constrained coherence by $\|A_b^*A_r\|/(\sigma_r\sigma_b)$ and then by a cross-Gram integral over escaping geodesic families
-- the third note derives a geometric separation corollary in which coherence decays exponentially with a criticality gap
-- the earlier summary note records that arc in one place and clarifies how the geodesic refinement sharpens the original Fourier-domain story
-- the subring note refines the signal side into an exponentially weighted hierarchy of winding-order subrings without changing the inverse-problem skeleton
-- the subring note shows that aggregate ring-background coherence is controlled by a weighted combination of subring-specific coherence terms
-- the subring note proves a finite truncation bound, so the infinite subring tower remains practically approximable
-- the newer summary note records the full provenance-and-subring arc and makes the resulting signal-versus-nuisance symmetry explicit
+  - baseline held-out evaluation
+- [coherence_subring_validation/run_validation_suite.py](coherence_subring_validation/run_validation_suite.py)
+  - one-command runner for the second validation suite
+- [coherence_subring_validation/coherence_subring_results/coherence_subring_report.html](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html)
+  - generated HTML report for the new experiments
 
 ## Requirements
 
-The scripts use a small scientific Python stack:
+The repo uses a small scientific Python stack:
 
 - `numpy`
 - `pandas`
 - `matplotlib`
 
-Everything else is from the Python standard library. No SciPy dependency is required.
-
-Install the Python packages with:
+Install dependencies with:
 
 ```bash
-python -m pip install numpy pandas matplotlib
+python -m pip install -r requirements.txt
 ```
 
-## How to run the prototype
+## Reproducible experiment tracks
 
-Run the scripts from the repository root, in this order:
+### 1. Baseline Fourier-domain prototype
+
+This is the original runnable pipeline in [simulation/](simulation). It generates synthetic images with a thin ring and a broader plasma component, tunes the structured Fourier estimator, and evaluates it on held-out data.
+
+Run it from the repository root:
 
 ```bash
 python simulation/01_generate_synthetic_bhex_images.py
@@ -110,211 +148,161 @@ python simulation/02_tune_bhex_estimator.py
 python simulation/03_run_bhex_estimator_on_holdout.py
 ```
 
-These steps depend on one another, so they should be run sequentially.
+With the current defaults, the baseline experiment uses:
 
-Practical notes:
-
-- the scripts use relative paths based on your current working directory
-- if you run them from the repository root, the output folders will appear at the top level of the repo
-- if you run them from another directory, the outputs will be created there instead
-- script 1 deletes and recreates `bhex_synthetic_dataset/` by default because `OVERWRITE_OUTPUT = True`
-
-## What each script does
-
-The scripts form a linear pipeline: generate controlled data, tune the estimator, then evaluate on held-out images.
-
-### 1. Generate synthetic images
-
-File: [simulation/01_generate_synthetic_bhex_images.py](simulation/01_generate_synthetic_bhex_images.py)
-
-This stage creates a toy dataset with known ground truth. Each sample includes:
-
-- a thin circular photon ring
-- a broader crescent-like plasma component
-- optional scattering-like blur
-- additive noise
-- small center jitter
-
-With the current defaults it creates:
-
-- 120 tuning images
-- 40 held-out images
+- random seed `7`
+- `120` tuning images and `40` held-out images
 - image size `256 x 256`
-- a fixed random seed of `7`
+- a circular thin-ring signal plus broader crescent-like plasma, blur, noise, and small center jitter
 
-It writes:
+It writes results to:
 
-- [bhex_synthetic_dataset/metadata.csv](bhex_synthetic_dataset/metadata.csv)
-- [bhex_synthetic_dataset/dataset_config.json](bhex_synthetic_dataset/dataset_config.json)
-- `bhex_synthetic_dataset/tune/images_npy/*.npy`
-- `bhex_synthetic_dataset/tune/png/*.png`
-- `bhex_synthetic_dataset/holdout/images_npy/*.npy`
-- `bhex_synthetic_dataset/holdout/png/*.png`
+- [bhex_synthetic_dataset/](bhex_synthetic_dataset)
+- [bhex_model_tuning/](bhex_model_tuning)
+- [bhex_holdout_results/](bhex_holdout_results)
 
-Each sample saves:
+Current default baseline results:
 
-- the noisy composite image
-- the true ring component
-- the true plasma component
+| Quantity | Value |
+| --- | ---: |
+| Best tuned `lambda` | `63.1` |
+| Best template width | `4.0 px` |
+| Held-out radius MAE | `0.269 px` |
+| Held-out mean confidence | `0.738` |
 
-Only the earliest generated examples get three-panel preview images, so the preview PNGs appear in the tuning split, not the holdout split.
+What this first experiment establishes:
 
-The most useful knobs near the top of the file are:
+- a direct heuristic can become visually unreliable before structured recovery fails
+- explicit ring templates plus a smooth nuisance class can recover the correct radius accurately on held-out synthetic data
+- the first Fourier-domain note is operational, reproducible, and easy to inspect
 
-- dataset size
-- image size
-- ring radius, width, and amplitude ranges
-- plasma offset, width, amplitude, and asymmetry ranges
-- blur and noise ranges
-- preview count
-- overwrite behavior
+### 2. Separate coherence + subring validation suite
 
-### 2. Tune the estimator
+The second experiment exists because the later notes require structure the baseline dataset does not contain. It therefore lives in its own directory and does not modify the baseline pipeline or its outputs.
 
-File: [simulation/02_tune_bhex_estimator.py](simulation/02_tune_bhex_estimator.py)
+Run the full suite with:
 
-This stage reads the synthetic tuning set, downsamples the images for speed, moves them into Fourier space, and searches for a good estimator configuration.
-
-The fitting objective is intentionally simple:
-
-$$
-\min_{\alpha,\theta,q} \; \|y-\alpha g_{\theta}-q\|^2 + \lambda \|Hq\|^2,
-$$
-
-so the ring is fit explicitly while the nuisance term is penalized if it carries too much high-frequency structure.
-
-This is calibration rather than machine-learning training: the script is choosing a useful regularization strength and template width for this toy problem.
-
-Conceptually it does four things:
-
-- builds a bank of circular Gaussian ring templates
-- searches over candidate ring radii $\theta$
-- regularizes the nuisance term $q$ so it stays smoother than the ring
-- chooses the best hyperparameters by balancing radius error, amplitude error, and confidence
-
-With the current defaults it searches over:
-
-- `lambda` values on a log grid
-- template widths of `2.0`, `3.0`, and `4.0` original-image pixels
-- a ring-radius search range from `34` to `82` pixels
-- a working resolution of `64 x 64` after downsampling by `4`
-- a search subset of `30` tuning images before rerunning the best setting on the full tuning split
-
-It writes:
-
-- [bhex_model_tuning/tuned_model.json](bhex_model_tuning/tuned_model.json)
-- [bhex_model_tuning/tuning_grid_summary.csv](bhex_model_tuning/tuning_grid_summary.csv)
-- [bhex_model_tuning/tuning_predictions.csv](bhex_model_tuning/tuning_predictions.csv)
-- [bhex_model_tuning/heatmap_radius_mae.png](bhex_model_tuning/heatmap_radius_mae.png)
-- [bhex_model_tuning/heatmap_confidence.png](bhex_model_tuning/heatmap_confidence.png)
-- [bhex_model_tuning/scatter_true_vs_estimated_radius.png](bhex_model_tuning/scatter_true_vs_estimated_radius.png)
-- [bhex_model_tuning/hist_radius_error.png](bhex_model_tuning/hist_radius_error.png)
-- `bhex_model_tuning/*_tuning_example.png`
-
-The most important knobs near the top of the file are:
-
-- `DATA_ROOT`
-- `OUTPUT_ROOT`
-- `DOWNSAMPLE_FACTOR`
-- `MAX_TUNE_IMAGES_FOR_SEARCH`
-- `LAMBDA_GRID`
-- `TEMPLATE_WIDTH_GRID`
-- `PENALTY_POWER`
-- the radius-search bounds and step size
-
-### 3. Run held-out inference
-
-File: [simulation/03_run_bhex_estimator_on_holdout.py](simulation/03_run_bhex_estimator_on_holdout.py)
-
-This stage loads the tuned model from step 2 and applies it to the held-out images.
-
-For each held-out sample it:
-
-- estimates the ring parameters
-- reconstructs the ring and plasma components
-- computes residual diagnostics
-- exports a ring-emphasized PNG in which the ring $\hat{\alpha} g_{\hat{\theta}}$ stays visually prominent while the plasma remains visible in the background
-
-It writes:
-
-- [bhex_holdout_results/holdout_predictions.csv](bhex_holdout_results/holdout_predictions.csv)
-- [bhex_holdout_results/scatter_true_vs_estimated_radius_holdout.png](bhex_holdout_results/scatter_true_vs_estimated_radius_holdout.png)
-- [bhex_holdout_results/hist_radius_error_holdout.png](bhex_holdout_results/hist_radius_error_holdout.png)
-- [bhex_holdout_results/confidence_vs_radius_error_holdout.png](bhex_holdout_results/confidence_vs_radius_error_holdout.png)
-- `bhex_holdout_results/*_ring_hat.npy`
-- `bhex_holdout_results/*_plasma_hat.npy`
-- `bhex_holdout_results/*_ring_emphasized.png`
-
-Montages are available but off by default. To export them, set:
-
-```python
-EXPORT_PER_IMAGE_MONTAGES = True
+```bash
+python coherence_subring_validation/run_validation_suite.py
 ```
 
-The main visualization knobs in this script control:
+Equivalent step-by-step commands:
 
-- how bright the plasma background remains
-- how much of the original composite image remains visible
-- the minimum and maximum ring boost as a function of confidence
+```bash
+python coherence_subring_validation/01_generate_coherence_subring_dataset.py
+python coherence_subring_validation/02_run_coherence_subring_benchmark.py
+python coherence_subring_validation/03_build_coherence_subring_report.py
+```
 
-## Default behavior and example results
+With the current defaults, the second suite uses:
 
-The notes, the HTML page, and the default scripts are aligned around the same toy setup. With the current defaults, a full run produces roughly:
+- random seed `23`
+- `120` tuning images and `60` held-out images
+- image size `192 x 192`
+- `4` true subrings per image
+- designed gap levels `0.45, 0.85, 1.25, 1.65, 2.05`
+- a nuisance field built from a broad crescent, a gap-controlled near-critical shell, and diffuse blobs
 
-- the best tuned `lambda` is about `63.1`
-- the best template width is `4.0` pixels in the original image grid
-- tuning mean absolute radius error is about `0.24` pixels
-- held-out mean absolute radius error is about `0.27` pixels
-- held-out mean confidence is about `0.74`
+It writes results to:
 
-These are not universal scientific conclusions. They are example results for this specific synthetic prototype, random seed, and search grid.
+- [coherence_subring_validation/coherence_subring_dataset/](coherence_subring_validation/coherence_subring_dataset)
+- [coherence_subring_validation/coherence_subring_results/](coherence_subring_validation/coherence_subring_results)
+- [coherence_subring_validation/coherence_subring_results/coherence_subring_report.html](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html)
+
+Current hold-out validation results:
+
+| Method | Radius MAE (px) | Mean ring rel. MSE | Notes |
+| --- | ---: | ---: | --- |
+| Amplitude heuristic | `0.883` | `-` | direct readout baseline |
+| Monolithic ring model | `0.833` | `0.564` | structured, but one-ring only |
+| Two-subring model | `0.424` | `0.400` | best geometry |
+| Four-subring model | `0.433` | `0.231` | best full ring reconstruction |
+
+Additional quantitative takeaways:
+
+- subring-aware models cut held-out radius error by about `49%` relative to the monolithic model
+- the weighted subring coherence bound upper-bounds aggregate coherence on `100%` of held-out cases
+- the first three subrings retain about `91.4%` of the mean total ring norm
+- the designed gap and empirical coherence are negatively correlated, as intended by the synthetic construction
+
+What this second experiment establishes:
+
+- the coherence story can be instantiated numerically in a controlled synthetic benchmark
+- widening a designed separation gap reduces empirical ring-background overlap
+- subring-aware estimators recover geometry and morphology much better than a monolithic one-ring approximation
+- the finite-truncation logic is practically meaningful: only a few leading subrings already capture most of the signal
+
+## Why the repo is split into two experiment families
+
+Keeping the original prototype unchanged is part of the point.
+
+The baseline dataset was built to validate the first note:
+
+- one thin ring
+- one broad nuisance component
+- one structured estimator
+
+That setup is enough for the original mismatch and recoverability story, but not enough to validate the later notes directly. The later notes refer to provenance-constrained nuisance structure and a hierarchy of winding-order subrings. Those objects have to exist in the synthetic data before they can be tested honestly.
+
+So the repository uses a clean division:
+
+- `simulation/` is the original Fourier-domain prototype
+- `coherence_subring_validation/` is the later-theory validation suite
+
+That separation keeps the narrative honest and the experiments reproducible.
 
 ## Suggested reading path
 
-If you want the repository in the order of highest payoff, inspect these in order:
+If you want the shortest path through the repo:
 
-1. [index.html](index.html) for the high-level story and figures
-2. [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf) for the compact conceptual argument
-3. [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf) for the provenance restriction
-4. [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf) for the explicit coherence bound
-5. [manuscript/geodesic_coherence_summary_note_updated.pdf](manuscript/geodesic_coherence_summary_note_updated.pdf) for the earlier summary of that arc
-6. [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf) for the winding-order signal refinement
-7. [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf) for the full summary across the notes
-8. [bhex_model_tuning/tuned_model.json](bhex_model_tuning/tuned_model.json) after a run
-9. [bhex_model_tuning/heatmap_radius_mae.png](bhex_model_tuning/heatmap_radius_mae.png)
-10. [bhex_holdout_results/holdout_predictions.csv](bhex_holdout_results/holdout_predictions.csv)
-11. several `bhex_holdout_results/*_ring_emphasized.png` images
+1. Start with [index.html](index.html).
+2. Read [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf).
+3. Inspect the baseline scripts in [simulation/](simulation).
+4. Read [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf) and [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf).
+5. Read [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf) and [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf).
+6. Open the generated [coherence_subring_report.html](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html).
 
-The emphasized PNGs are especially useful because they show whether the recovered ring looks like a coherent thin structure rather than a broad halo.
+If you want the runnable story in output form after executing the scripts:
+
+1. Inspect [bhex_model_tuning/tuned_model.json](bhex_model_tuning/tuned_model.json).
+2. Inspect [bhex_holdout_results/holdout_predictions.csv](bhex_holdout_results/holdout_predictions.csv).
+3. Inspect several `bhex_holdout_results/*_ring_emphasized.png` images.
+4. Inspect [coherence_subring_validation/coherence_subring_results/holdout_method_summary.csv](coherence_subring_validation/coherence_subring_results/holdout_method_summary.csv).
+5. Inspect the figures under [coherence_subring_validation/coherence_subring_results/figures/](coherence_subring_validation/coherence_subring_results/figures).
 
 ## Scope and limitations
 
-This prototype is intentionally narrow. It currently uses:
+This is still a research prototype, not a mission-grade astrophysical pipeline.
+
+The baseline code remains intentionally simple:
 
 - circular Gaussian-like ring templates
-- a broad crescent-like plasma model in the synthetic images
 - full-image FFTs rather than realistic sparse baseline sampling
-- a smoothness penalty for nuisance structure instead of a provenance-constrained or ray-tracing-informed nuisance family
+- a smooth nuisance penalty rather than provenance-constrained transport operators
 - point estimates and simple confidence scores rather than full uncertainty quantification
 
-It does not currently estimate provenance operators $A_r$ or $A_b$, a provenance-constrained nuisance family $Q_{\mathrm{prov}}$, a criticality index, a cross-Gram kernel, or a subring-resolved signal tower. Those belong to the later mathematical notes, not to the present Python implementation.
+The new validation suite is also intentionally scoped:
 
-That scope is a feature, not a bug. The goal is to isolate the estimation mechanism clearly before adding astrophysical realism.
+- it is synthetic and controlled
+- it instantiates the later coherence and subring inequalities directly
+- it is not a full ray-traced geodesic forward model
 
-Natural upgrades, also reflected in the HTML presentation, include:
+So the repo now demonstrates two different things:
 
-- elliptical or spin-informed ring families
-- explicit baseline masks and more realistic visibility sampling
-- provenance-constrained nuisance classes
-- cross-Gram or $A_b^*A_r$ estimates from ray tracing or simulation
-- subring-resolved ring families with explicit winding-order weights
-- criticality indices that turn geometric separation into a computable recoverability diagnostic
-- posterior summaries or uncertainty bands
-- confidence diagnostics tied more directly to recoverability margins
+- the first-note structured estimator works in a clean toy setting
+- the later coherence and subring logic works in a purpose-built synthetic benchmark
+
+What is still not implemented in the main recovery code:
+
+- provenance-constrained nuisance classes inside `simulation/`
+- direct estimation of $A_r$, $A_b$, or $A_b^* A_r$
+- realistic sparse visibility sampling and baseline masks
+- a subring-resolved inference model inside the original prototype itself
+- a more realistic criticality-index-based forward model
 
 ## Related BHEX papers
 
-The mathematical framing in this repository is motivated by the broader BHEX program. The notes in this repo cite these BHEX collaboration references directly:
+The mathematical framing in this repo is motivated by the broader BHEX program. The notes here cite these BHEX collaboration references directly:
 
 - *Black Hole Explorer: Motivation and Vision*, arXiv:2406.12917, https://arxiv.org/abs/2406.12917
 - *The Black Hole Explorer: Photon Ring Science, Detection and Shape Measurement*, arXiv:2406.09498, https://arxiv.org/abs/2406.09498
@@ -322,10 +310,6 @@ The mathematical framing in this repository is motivated by the broader BHEX pro
 
 ## Bottom line
 
-This repository is best read as a BHEX-motivated thought experiment made executable.
+This repository is now best read as a two-stage executable argument.
 
-It starts from the physical picture of a thin photon ring embedded in broader plasma emission, moves that picture into Fourier space, and then asks a practical question:
-
-can a ring-aware estimator still recover the geometry after a simple long-baseline readout has become hard to interpret?
-
-The first note argues yes in principle. The scripts show one concrete toy implementation of that first-note argument, while the later notes extend the mathematics to provenance, coherence, subring hierarchy, and summary-level synthesis beyond what is currently implemented.
+The first stage shows, in a deliberately minimal Fourier-domain prototype, that ring-aware structured recovery can succeed after a direct visibility-amplitude heuristic becomes hard to interpret. The second stage shows, in a separate controlled benchmark, that the later geodesic-coherence and subring-resolved mathematics are not merely formal extensions: they produce measurable gains in recoverability, reconstruction quality, and finite-truncation behavior once the synthetic data actually contains the corresponding latent structure.
