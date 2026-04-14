@@ -340,6 +340,10 @@
       .step p.small { display: block; overflow: visible; }
     }
     @media (max-width: 760px) {
+      .wrap {
+        padding-left: clamp(20px, 5vw, 24px);
+        padding-right: clamp(20px, 5vw, 24px);
+      }
       .prototype-side { gap: 14px; }
       .prototype-explainer,
       .prototype-formula { padding: 16px; }
