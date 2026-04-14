@@ -242,9 +242,32 @@
     }
     #references .panel { overflow: hidden; }
     .validation-detail-grid { display: grid; grid-template-columns: 1.02fr 0.98fr; gap: 24px; align-items: start; }
-    .validation-figure-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; align-items: start; }
+    .validation-figure-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: start;
+      justify-items: center;
+    }
     .validation-stat-grid > * { min-width: 0; }
     .validation-figure-grid > * { min-width: 0; }
+    .validation-figure-card {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      width: 100%;
+      max-width: 760px;
+    }
+    .validation-figure-card .figure-img {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .validation-card-cases .figure-img { width: min(100%, 576px); }
+    .validation-card-summary .figure-img { width: min(100%, 576px); }
+    .validation-card-coherence {
+      max-width: 700px;
+    }
+    .validation-card-coherence .figure-img { width: min(100%, 504px); }
     .case-card { padding: clamp(16px, 4vw, 20px); border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)); box-shadow: var(--shadow); margin-top: 14px; }
     .case-top { display: flex; justify-content: space-between; gap: 16px; align-items: start; margin-bottom: 14px; }
     .confidence-pill { white-space: nowrap; border: 1px solid rgba(255,255,255,0.12); background: rgba(126,231,255,0.10); color: var(--cyan); padding: 8px 12px; border-radius: 999px; font-size: var(--fs-xs); font-weight: 700; }
@@ -830,15 +853,15 @@
       </div>
 
       <div class="validation-figure-grid" style="margin-top:22px">
-        <figure class="glass figure-card">
+        <figure class="glass figure-card validation-figure-card validation-card-cases">
           <img class="figure-img" alt="Representative held-out cases across the designed coherence gap" src="coherence_subring_validation/coherence_subring_results/figures/figure_01_gap_cases.png" />
           <figcaption>Representative held-out cases across low, middle, and high designed-gap regimes. The four-subring estimate keeps the ring geometry crisp even when the nuisance field becomes visually dominant.</figcaption>
         </figure>
-        <figure class="glass figure-card">
+        <figure class="glass figure-card validation-figure-card validation-card-summary">
           <img class="figure-img" alt="Held-out method comparison for the validation suite" src="coherence_subring_validation/coherence_subring_results/figures/figure_03_method_comparison.png" />
           <figcaption>The quantitative summary figure for the second suite: subring-aware models nearly halve held-out radius error, and the four-subring model gives the cleanest ring reconstruction.</figcaption>
         </figure>
-        <figure class="glass figure-card">
+        <figure class="glass figure-card validation-figure-card validation-card-coherence">
           <img class="figure-img" alt="Designed gap versus empirical coherence and weighted subring bound" src="coherence_subring_validation/coherence_subring_results/figures/figure_05_gap_and_bound.png" />
           <figcaption>The left panel shows coherence decaying as the designed gap widens. The right panel shows the weighted subring bound sitting above aggregate coherence on every held-out sample.</figcaption>
         </figure>
