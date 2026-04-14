@@ -42,11 +42,26 @@ def figure_rel_path(name: str) -> str:
     return Path("figures") / name
 
 
-def img_card(src: str, title: str, caption: str, large: bool = False) -> str:
-    card_class = "figure-card figure-card-large" if large else "figure-card"
+def img_card(
+    src: str,
+    title: str,
+    caption: str,
+    large: bool = False,
+    variant: str = "balanced",
+) -> str:
+    card_classes = ["glass", "figure-card"]
+    if large:
+        card_classes.append("figure-card-large")
+    if variant:
+        card_classes.append(f"figure-card-{variant}")
+    image_classes = ["figure-img"]
+    if variant:
+        image_classes.append(f"figure-img-{variant}")
     return f"""
-    <figure class="{card_class}">
-      <img src="{html.escape(src)}" alt="{html.escape(title)}" />
+    <figure class="{' '.join(card_classes)}">
+      <div class="figure-media">
+        <img class="{' '.join(image_classes)}" src="{html.escape(src)}" alt="{html.escape(title)}" />
+      </div>
       <figcaption>
         <h3>{html.escape(title)}</h3>
         <p>{html.escape(caption)}</p>
@@ -180,6 +195,14 @@ tuned_lambda_lines = [
     for method, value in benchmark_summary["tuned_lambdas"].items()
 ]
 tuned_lambda_html = "<br />".join(html.escape(line) for line in tuned_lambda_lines)
+equation_block_html = "\n".join(
+    [
+        r'          <div class="equation">\[ y = \sum_{n=1}^{N} \alpha_1 e^{-\gamma (n-1)} g_{\theta,n} + q + \epsilon \]</div>',
+        r'          <div class="equation">\[ \mu(g, q) = \frac{\lvert \langle g, q \rangle \rvert}{\lVert g \rVert \, \lVert q \rVert} \]</div>',
+        r'          <div class="equation">\[ \mu\!\left(\sum_n \alpha_n g_n, q\right) \le \frac{\sum_n \lvert \alpha_n \rvert \, \lVert g_n \rVert \, \mu(g_n, q)}{\left\lVert \sum_n \alpha_n g_n \right\rVert} \]</div>',
+        r'          <div class="equation">\[ \left\lVert \sum_{n>N} \alpha_n g_n \right\rVert \le \frac{\alpha_1 c_{\max} e^{-\gamma N}}{1 - e^{-\gamma}} \]</div>',
+    ]
+)
 
 html_report = f"""<!DOCTYPE html>
 <html lang="en">
@@ -187,38 +210,70 @@ html_report = f"""<!DOCTYPE html>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Coherence + Subring Validation Report</title>
+  <script>
+    window.MathJax = {{
+      tex: {{
+        inlineMath: [['\\\\(', '\\\\)']],
+        displayMath: [['\\\\[', '\\\\]']]
+      }},
+      chtml: {{
+        displayAlign: 'left'
+      }}
+    }};
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
   <style>
     :root {{
-      --bg: #f5f3ef;
-      --panel: rgba(255, 255, 255, 0.84);
-      --panel-strong: #ffffff;
-      --ink: #1c2235;
-      --muted: #5c667d;
-      --line: #d9d3ca;
-      --accent: #df6b42;
-      --accent-2: #2f9c94;
-      --accent-3: #223b53;
-      --hero: radial-gradient(circle at top left, rgba(255, 164, 88, 0.32), transparent 38%), radial-gradient(circle at 86% 18%, rgba(51, 92, 122, 0.42), transparent 26%), linear-gradient(140deg, #0b1120, #17253b 52%, #24151d 100%);
-      --shadow: 0 24px 60px rgba(20, 24, 40, 0.10);
+      --bg: #0a0f1a;
+      --bg2: #12192b;
+      --panel: rgba(255,255,255,0.06);
+      --panel-strong: rgba(255,255,255,0.09);
+      --line: rgba(255,255,255,0.12);
+      --text: #ebf0ff;
+      --muted: #aeb8d4;
+      --gold: #ffd480;
+      --cyan: #7ee7ff;
+      --pink: #ffb6da;
+      --green: #b9ffca;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --max: 1180px;
+      --fs-2xs: clamp(0.70rem, 0.68rem + 0.08vw, 0.76rem);
+      --fs-xs: clamp(0.78rem, 0.75rem + 0.10vw, 0.84rem);
+      --fs-sm: clamp(0.84rem, 0.82rem + 0.12vw, 0.91rem);
+      --fs-base: clamp(0.96rem, 0.93rem + 0.16vw, 1.02rem);
+      --fs-md: clamp(1.04rem, 1.00rem + 0.24vw, 1.14rem);
+      --fs-lg: clamp(1.12rem, 1.05rem + 0.38vw, 1.28rem);
+      --fs-xl: clamp(1.38rem, 1.24rem + 0.70vw, 1.82rem);
+      --fs-2xl: clamp(1.90rem, 1.56rem + 1.22vw, 2.55rem);
+      --fs-metric: clamp(1.18rem, 1.08rem + 0.46vw, 1.45rem);
     }}
 
     * {{
       box-sizing: border-box;
     }}
 
+    html {{
+      max-width: 100%;
+      overflow-x: hidden;
+    }}
+
     body {{
       margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      font-size: var(--fs-base);
+      color: var(--text);
       background:
-        radial-gradient(circle at top, rgba(255, 179, 92, 0.12), transparent 24%),
-        linear-gradient(180deg, #fbfaf7 0%, var(--bg) 40%, #f2efe8 100%);
-      color: var(--ink);
-      font-family: "Aptos", "Segoe UI", "Trebuchet MS", sans-serif;
-      line-height: 1.6;
+        radial-gradient(1100px 700px at 90% -10%, rgba(126,231,255,0.12), transparent 60%),
+        radial-gradient(900px 600px at -10% 10%, rgba(255,180,200,0.10), transparent 55%),
+        linear-gradient(180deg, #09101d 0%, #0c1322 35%, #0c1320 100%);
+      line-height: 1.58;
+      max-width: 100%;
       overflow-x: hidden;
     }}
 
     a {{
-      color: var(--accent-3);
+      color: var(--cyan);
+      text-decoration: none;
     }}
 
     img {{
@@ -232,9 +287,32 @@ html_report = f"""<!DOCTYPE html>
     }}
 
     .shell {{
-      width: min(1240px, calc(100vw - 40px));
+      max-width: var(--max);
       margin: 0 auto;
-      padding: 28px 0 80px;
+      padding: 28px 20px 80px;
+    }}
+
+    nav {{
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      backdrop-filter: blur(18px);
+      background: rgba(9,15,26,0.74);
+      border-bottom: 1px solid var(--line);
+    }}
+
+    nav .shell {{
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding-top: 14px;
+      padding-bottom: 14px;
+      scrollbar-width: thin;
+    }}
+
+    nav a {{
+      color: var(--muted);
+      font-size: var(--fs-sm);
     }}
 
     .hero {{
@@ -242,9 +320,12 @@ html_report = f"""<!DOCTYPE html>
       overflow: hidden;
       padding: 42px 42px 36px;
       border-radius: 28px;
-      background: var(--hero);
-      color: #f8f8fc;
+      background:
+        radial-gradient(1100px 700px at 90% -10%, rgba(126,231,255,0.12), transparent 60%),
+        radial-gradient(900px 600px at -10% 10%, rgba(255,180,200,0.10), transparent 55%),
+        linear-gradient(180deg, #09101d 0%, #0c1322 35%, #0c1320 100%);
       box-shadow: var(--shadow);
+      border: 1px solid var(--line);
     }}
 
     .hero::after {{
@@ -254,7 +335,7 @@ html_report = f"""<!DOCTYPE html>
       width: 360px;
       height: 360px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 179, 92, 0.34), rgba(255, 179, 92, 0.10) 42%, transparent 70%);
+      background: radial-gradient(circle, rgba(126,231,255,0.18), rgba(126,231,255,0.06) 42%, transparent 70%);
       filter: blur(4px);
       pointer-events: none;
     }}
@@ -262,34 +343,31 @@ html_report = f"""<!DOCTYPE html>
     .eyebrow {{
       display: inline-block;
       margin-bottom: 14px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.10);
-      color: #ffd0ae;
-      font-size: 0.80rem;
-      letter-spacing: 0.08em;
+      color: var(--cyan);
+      font-size: var(--fs-2xs);
+      font-weight: 700;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
     }}
 
     h1, h2, h3 {{
       margin: 0;
-      font-family: Georgia, "Palatino Linotype", serif;
       line-height: 1.15;
     }}
 
     h1 {{
       max-width: 12ch;
-      font-size: clamp(2.3rem, 5vw, 4.3rem);
+      font-size: var(--fs-2xl);
       letter-spacing: -0.035em;
     }}
 
     h2 {{
-      font-size: clamp(1.5rem, 2vw, 2.1rem);
+      font-size: var(--fs-xl);
       margin-bottom: 14px;
     }}
 
     h3 {{
-      font-size: 1.08rem;
+      font-size: var(--fs-lg);
       margin-bottom: 8px;
     }}
 
@@ -303,8 +381,8 @@ html_report = f"""<!DOCTYPE html>
     .hero-copy p {{
       max-width: 66ch;
       margin: 16px 0 0;
-      color: rgba(248, 248, 252, 0.88);
-      font-size: 1.02rem;
+      color: var(--muted);
+      font-size: var(--fs-md);
     }}
 
     .hero-notes {{
@@ -315,16 +393,16 @@ html_report = f"""<!DOCTYPE html>
     .hero-note {{
       padding: 16px 18px;
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.09);
-      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
       backdrop-filter: blur(8px);
     }}
 
     .hero-note strong {{
       display: block;
-      color: #ffd0ae;
-      font-size: 0.84rem;
-      letter-spacing: 0.05em;
+      color: var(--gold);
+      font-size: var(--fs-xs);
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       margin-bottom: 4px;
     }}
@@ -333,9 +411,9 @@ html_report = f"""<!DOCTYPE html>
       margin-top: 30px;
       padding: 28px 30px 30px;
       border-radius: 24px;
-      background: var(--panel);
-      border: 1px solid rgba(196, 188, 176, 0.62);
-      box-shadow: 0 14px 36px rgba(34, 42, 56, 0.07);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
       backdrop-filter: blur(6px);
     }}
 
@@ -354,29 +432,29 @@ html_report = f"""<!DOCTYPE html>
     .card {{
       padding: 18px 18px 16px;
       border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,248,244,0.90));
-      border: 1px solid rgba(213, 206, 196, 0.9);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
     }}
 
     .card .label {{
       display: block;
       margin-bottom: 8px;
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: var(--fs-2xs);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
     }}
 
     .card .value {{
-      font-size: 1.7rem;
+      font-size: var(--fs-metric);
       line-height: 1.05;
-      color: var(--accent-3);
+      color: var(--text);
       font-weight: 700;
     }}
 
     .card p {{
       margin: 8px 0 0;
-      font-size: 0.94rem;
+      font-size: var(--fs-sm);
     }}
 
     .split {{
@@ -390,19 +468,28 @@ html_report = f"""<!DOCTYPE html>
       margin-top: 14px;
       padding: 18px 20px;
       border-radius: 18px;
-      background: #fffdf9;
-      border: 1px solid #e6ddd0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow: hidden;
+      max-width: 100%;
+    }}
+
+    .equation {{
+      margin: 0 0 14px;
+      font-size: 1.01rem;
+      color: var(--text);
       overflow-x: auto;
+      overflow-y: hidden;
       max-width: 100%;
       -webkit-overflow-scrolling: touch;
     }}
 
-    .equation {{
-      margin: 0 0 12px;
-      font-family: "Cascadia Code", "Consolas", monospace;
-      font-size: 0.98rem;
-      color: #20283e;
-      white-space: nowrap;
+    .equation mjx-container {{
+      color: var(--text) !important;
+    }}
+
+    .equation mjx-container[jax="CHTML"][display="true"] {{
+      margin: 0 !important;
     }}
 
     .equation:last-child {{
@@ -415,6 +502,31 @@ html_report = f"""<!DOCTYPE html>
       gap: 18px;
     }}
 
+    #visuals .figure-grid {{
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }}
+
+    .coherence-figure-stack {{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }}
+
+    .coherence-figure-stack .figure-card {{
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }}
+
+    .coherence-figure-stack .figure-media {{
+      padding: 10px;
+    }}
+
+    .coherence-figure-stack .figure-img-balanced {{
+      max-width: min(100%, 860px);
+    }}
+
     .figure-grid-3 {{
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -425,20 +537,45 @@ html_report = f"""<!DOCTYPE html>
       margin: 0;
       padding: 16px;
       border-radius: 20px;
-      background: var(--panel-strong);
-      border: 1px solid #e6ddd0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
     }}
 
     .figure-card-large {{
       padding: 18px;
     }}
 
-    .figure-card img {{
+    .figure-media {{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(5,6,8,0.58);
+    }}
+
+    .figure-img {{
       width: 100%;
       display: block;
-      border-radius: 14px;
-      border: 1px solid #ece6dc;
-      background: #f7f2ea;
+      border-radius: 10px;
+      background: #050608;
+      object-fit: contain;
+      margin-left: auto;
+      margin-right: auto;
+    }}
+
+    .figure-img-balanced {{
+      max-width: min(100%, 640px);
+    }}
+
+    .figure-img-wide {{
+      max-width: 100%;
+    }}
+
+    .figure-img-compact {{
+      max-width: min(100%, 520px);
     }}
 
     figcaption {{
@@ -447,16 +584,17 @@ html_report = f"""<!DOCTYPE html>
 
     figcaption p {{
       margin: 0;
-      font-size: 0.95rem;
+      font-size: var(--fs-sm);
     }}
 
     .table-wrap {{
       overflow-x: auto;
       border-radius: 18px;
-      border: 1px solid #e6ddd0;
-      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
       max-width: 100%;
       -webkit-overflow-scrolling: touch;
+      box-shadow: var(--shadow);
     }}
 
     table {{
@@ -467,14 +605,15 @@ html_report = f"""<!DOCTYPE html>
 
     th, td {{
       padding: 12px 14px;
-      border-bottom: 1px solid #ede7dc;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       text-align: left;
-      font-size: 0.95rem;
+      font-size: var(--fs-sm);
+      color: var(--text);
     }}
 
     th {{
-      background: #f8f4ee;
-      color: #2b3551;
+      background: rgba(255,255,255,0.05);
+      color: var(--gold);
       font-weight: 700;
     }}
 
@@ -496,10 +635,11 @@ html_report = f"""<!DOCTYPE html>
       margin-top: 14px;
       padding: 16px 18px;
       border-radius: 18px;
-      background: #121a29;
-      color: #e8edf8;
+      background: #0b1120;
+      color: var(--text);
+      border: 1px solid var(--line);
       font-family: "Cascadia Code", "Consolas", monospace;
-      font-size: 0.92rem;
+      font-size: var(--fs-sm);
       overflow-x: auto;
       white-space: pre;
       max-width: 100%;
@@ -507,21 +647,31 @@ html_report = f"""<!DOCTYPE html>
     }}
 
     .kicker {{
-      color: var(--accent);
+      color: var(--cyan);
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      font-size: 0.78rem;
+      font-size: var(--fs-2xs);
       margin-bottom: 8px;
     }}
 
     .footnote {{
       margin-top: 12px;
-      font-size: 0.9rem;
-      color: #6a7387;
+      font-size: var(--fs-sm);
+      color: var(--muted);
     }}
 
     @media (max-width: 1040px) {{
+      nav .shell {{
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }}
+
+      nav a {{
+        flex: 0 0 auto;
+      }}
+
       .hero-grid,
       .cards,
       .split,
@@ -531,7 +681,8 @@ html_report = f"""<!DOCTYPE html>
       }}
 
       .shell {{
-        width: min(100vw - 22px, 1000px);
+        padding-left: 11px;
+        padding-right: 11px;
       }}
 
       .hero {{
@@ -545,8 +696,7 @@ html_report = f"""<!DOCTYPE html>
 
     @media (max-width: 720px) {{
       .shell {{
-        width: min(100vw - 14px, 1000px);
-        padding: 14px 0 48px;
+        padding: 14px 7px 48px;
       }}
 
       .hero {{
@@ -558,6 +708,12 @@ html_report = f"""<!DOCTYPE html>
         margin-top: 18px;
         padding: 18px 14px 18px;
         border-radius: 20px;
+      }}
+
+      nav .shell {{
+        gap: 14px;
+        padding-top: 12px;
+        padding-bottom: 12px;
       }}
 
       .hero-note,
@@ -575,11 +731,7 @@ html_report = f"""<!DOCTYPE html>
       }}
 
       .equation {{
-        white-space: normal;
-        overflow-wrap: anywhere;
-        word-break: break-word;
-        font-size: 0.9rem;
-        line-height: 1.5;
+        font-size: 0.92rem;
       }}
 
       .code-block {{
@@ -605,8 +757,20 @@ html_report = f"""<!DOCTYPE html>
   </style>
 </head>
 <body>
+  <nav>
+    <div class="shell">
+      <a href="#overview">Overview</a>
+      <a href="#summary">Summary</a>
+      <a href="#design">Design</a>
+      <a href="#visuals">Visuals</a>
+      <a href="#comparison">Comparison</a>
+      <a href="#coherence">Coherence</a>
+      <a href="#truncation">Truncation</a>
+      <a href="#reproducibility">Reproducibility</a>
+    </div>
+  </nav>
   <main class="shell">
-    <section class="hero">
+    <section class="hero" id="overview">
       <div class="hero-grid">
         <div class="hero-copy">
           <span class="eyebrow">Separate Validation Suite</span>
@@ -640,7 +804,7 @@ html_report = f"""<!DOCTYPE html>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="summary">
       <div class="kicker">Executive Summary</div>
       <h2>What this new suite establishes</h2>
       <p>
@@ -674,7 +838,7 @@ html_report = f"""<!DOCTYPE html>
       </div>
     </section>
 
-    <section class="section split">
+    <section class="section split" id="design">
       <div>
         <div class="kicker">Synthetic Design</div>
         <h2>How the validation dataset is built</h2>
@@ -699,10 +863,7 @@ html_report = f"""<!DOCTYPE html>
         <div class="kicker">Mathematical Bridge</div>
         <h2>Equations encoded by the suite</h2>
         <div class="equation-box">
-          <div class="equation">y = &Sigma;<sub>n=1</sub><sup>N</sup> &alpha;<sub>1</sub> exp(-&gamma;(n-1)) g<sub>&theta;,n</sub> + q + &epsilon;</div>
-          <div class="equation">&mu;(g, q) = |&lang;g, q&rang;| / (||g|| ||q||)</div>
-          <div class="equation">&mu;(&Sigma;<sub>n</sub> &alpha;<sub>n</sub> g<sub>n</sub>, q) &le; (&Sigma;<sub>n</sub> |&alpha;<sub>n</sub>| ||g<sub>n</sub>|| &mu;(g<sub>n</sub>, q)) / ||&Sigma;<sub>n</sub> &alpha;<sub>n</sub> g<sub>n</sub>||</div>
-          <div class="equation">||&Sigma;<sub>n&gt;N</sub> &alpha;<sub>n</sub> g<sub>n</sub>|| &le; &alpha;<sub>1</sub> c<sub>max</sub> exp(-&gamma;N) / (1 - exp(-&gamma;))</div>
+{equation_block_html}
         </div>
         <p class="footnote">
           The suite is still operator-lite and synthetic. It is not a full ray-traced geodesic transport benchmark. The value
@@ -711,16 +872,16 @@ html_report = f"""<!DOCTYPE html>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="visuals">
       <div class="kicker">Visual Evidence</div>
       <h2>Representative images and signal structure</h2>
       <div class="figure-grid">
-        {img_card(figure_rel_path("figure_01_gap_cases.png").as_posix(), "Representative held-out gap cases", "Across low, medium, and high designed-gap cases, the aggregate ring stays recoverable even as the nuisance field becomes more confounding. The four-subring estimator keeps the ring geometry crisp across the grid.", large=True)}
-        {img_card(figure_rel_path("figure_02_subring_tower.png").as_posix(), "True subring-resolved tower", "A single held-out example showing the aggregate image and the four latent subrings that generate it. The later subrings are weaker but still non-negligible, which is why a monolithic one-ring model loses fidelity.")}
+        {img_card(figure_rel_path("figure_01_gap_cases.png").as_posix(), "Representative held-out gap cases", "Across low, medium, and high designed-gap cases, the aggregate ring stays recoverable even as the nuisance field becomes more confounding. The four-subring estimator keeps the ring geometry crisp across the grid.", large=True, variant="balanced")}
+        {img_card(figure_rel_path("figure_02_subring_tower.png").as_posix(), "True subring-resolved tower", "A single held-out example showing the aggregate image and the four latent subrings that generate it. The later subrings are weaker but still non-negligible, which is why a monolithic one-ring model loses fidelity.", variant="balanced")}
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="comparison">
       <div class="kicker">Quantitative Comparison</div>
       <h2>Accuracy and reconstruction quality by method</h2>
       <p>
@@ -729,7 +890,7 @@ html_report = f"""<!DOCTYPE html>
         is slightly less sharp on radius but substantially better at reconstructing the full ring morphology.
       </p>
       <div class="figure-grid">
-        {img_card(figure_rel_path("figure_03_method_comparison.png").as_posix(), "Held-out method comparison", "Subring-aware estimators cut geometry error roughly in half. The four-subring variant produces the cleanest ring reconstruction even though its radius MAE is only marginally above the two-subring model.", large=True)}
+        {img_card(figure_rel_path("figure_03_method_comparison.png").as_posix(), "Held-out method comparison", "Subring-aware estimators cut geometry error roughly in half. The four-subring variant produces the cleanest ring reconstruction even though its radius MAE is only marginally above the two-subring model.", large=True, variant="wide")}
         <div>
           {summary_table}
           <p class="footnote">
@@ -740,12 +901,12 @@ html_report = f"""<!DOCTYPE html>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="coherence">
       <div class="kicker">Coherence Validation</div>
       <h2>Where the coherence claims show up in data</h2>
-      <div class="figure-grid">
-        {img_card(figure_rel_path("figure_04_error_vs_coherence.png").as_posix(), "Error versus empirical coherence", "Every method degrades as ring-background coherence rises, but the subring-aware models degrade far more gracefully. In the highest empirical-coherence third, they still stay near half-pixel mean radius error.", large=True)}
-        {img_card(figure_rel_path("figure_05_gap_and_bound.png").as_posix(), "Gap decay and weighted bound", "The left panel shows the intended monotone trend from designed gap to empirical overlap. The right panel shows the weighted subring bound sitting above the aggregate coherence on every held-out case.")}
+      <div class="coherence-figure-stack">
+        {img_card(figure_rel_path("figure_04_error_vs_coherence.png").as_posix(), "Error versus empirical coherence", "Every method degrades as ring-background coherence rises, but the subring-aware models degrade far more gracefully. In the highest empirical-coherence third, they still stay near half-pixel mean radius error.", large=True, variant="wide")}
+        {img_card(figure_rel_path("figure_05_gap_and_bound.png").as_posix(), "Gap decay and weighted bound", "The upper panel shows the intended monotone trend from designed gap to empirical overlap. The lower panel shows the weighted subring bound sitting above the aggregate coherence on every held-out case.", large=True, variant="wide")}
       </div>
       <p>
         On the hold-out split, the designed gap and empirical coherence correlate at {fmt(gap_corr, 3)}. The fitted decay curve
@@ -758,11 +919,11 @@ html_report = f"""<!DOCTYPE html>
       {bucket_table}
     </section>
 
-    <section class="section">
+    <section class="section" id="truncation">
       <div class="kicker">Finite Truncation</div>
       <h2>Only a few leading subrings are needed</h2>
       <div class="figure-grid">
-        {img_card(figure_rel_path("figure_06_truncation_curve.png").as_posix(), "Average truncation behavior", "The true residual tail falls rapidly as more leading subrings are kept. The geometric envelope stays conservative and decays in the same direction.", large=True)}
+        {img_card(figure_rel_path("figure_06_truncation_curve.png").as_posix(), "Average truncation behavior", "The true residual tail falls rapidly as more leading subrings are kept. The geometric envelope stays conservative and decays in the same direction.", large=True, variant="balanced")}
         <div>
           <p>
             The mean remaining tail fraction is {pct(tail_n1)} after keeping only the leading subring, {pct(tail_n2)} after keeping
@@ -778,7 +939,7 @@ html_report = f"""<!DOCTYPE html>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="reproducibility">
       <div>
         <div class="kicker">Reproducibility</div>
         <h2>How to rerun the suite</h2>

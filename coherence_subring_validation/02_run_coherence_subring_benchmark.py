@@ -410,8 +410,14 @@ def save_subring_tower_figure() -> str:
     ring_true = np.load(DATA_ROOT / "holdout" / "images_npy" / f"{sample_id}_ring_true.npy")
     subrings = np.load(DATA_ROOT / "holdout" / "images_npy" / f"{sample_id}_subrings_true.npy")
 
-    fig = plt.figure(figsize=(13.4, 5.0), constrained_layout=True)
-    grid = fig.add_gridspec(2, 4, width_ratios=[1.2, 1.2, 1.0, 1.0], wspace=0.08, hspace=0.08)
+    fig = plt.figure(figsize=(12.6, 6.2))
+    grid = fig.add_gridspec(
+        2,
+        4,
+        width_ratios=[1.0, 1.0, 1.15, 1.15],
+        wspace=0.28,
+        hspace=0.42,
+    )
     axes = [
         fig.add_subplot(grid[:, 0]),
         fig.add_subplot(grid[:, 1]),
@@ -432,13 +438,14 @@ def save_subring_tower_figure() -> str:
     cmaps = ["inferno", "inferno", "magma", "magma", "magma", "magma"]
     for ax, image, label, cmap in zip(axes, images, labels, cmaps):
         ax.imshow(robust_normalize(image), cmap=cmap)
-        ax.set_title(label)
+        ax.set_title(label, fontsize=13, fontweight="semibold", pad=10)
         ax.axis("off")
     fig.suptitle(
         f"True subring-resolved signal tower for {sample_id} | gamma={chosen['gamma_true']:.2f}, gap={chosen['gap_true']:.2f}",
-        fontsize=15,
-        y=0.98,
+        fontsize=18,
+        y=0.965,
     )
+    fig.subplots_adjust(left=0.035, right=0.985, bottom=0.06, top=0.88)
     fig.savefig(FIG_ROOT / "figure_02_subring_tower.png", dpi=170, bbox_inches="tight")
     plt.close(fig)
     return sample_id
@@ -522,7 +529,12 @@ def save_gap_and_bound_figure() -> tuple[float, float]:
     scale_hat = float(np.exp(coeffs[1]))
     fit_curve = scale_hat * np.exp(-beta_hat * gaps)
 
-    fig, axes = plt.subplots(1, 2, figsize=(12.4, 4.8))
+    fig, axes = plt.subplots(
+        2,
+        1,
+        figsize=(8.2, 8.8),
+        gridspec_kw={"height_ratios": [1.15, 1.0]},
+    )
 
     ax = axes[0]
     ax.scatter(
@@ -537,8 +549,9 @@ def save_gap_and_bound_figure() -> tuple[float, float]:
     ax.plot(gaps, fit_curve, linestyle="--", color="#2a9d8f", lw=2.0, label=f"exp fit, beta={beta_hat:.2f}")
     ax.set_xlabel("Designed criticality gap")
     ax.set_ylabel("Empirical coherence")
-    ax.set_title("Coherence decays as the designed gap widens")
+    ax.set_title("Coherence decays as the designed gap widens", pad=10)
     ax.legend(loc="upper right")
+    ax.grid(alpha=0.22)
 
     ax = axes[1]
     ax.scatter(
@@ -553,9 +566,10 @@ def save_gap_and_bound_figure() -> tuple[float, float]:
     ax.plot([lo, hi], [lo, hi], linestyle="--", color="#c63d2f", lw=1.5)
     ax.set_xlabel("True aggregate coherence")
     ax.set_ylabel("Weighted subring bound RHS")
-    ax.set_title("The weighted subring bound upper-bounds aggregate coherence")
+    ax.set_title("The weighted subring bound upper-bounds aggregate coherence", pad=10)
+    ax.grid(alpha=0.22)
 
-    fig.tight_layout()
+    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.07, top=0.95, hspace=0.34)
     fig.savefig(FIG_ROOT / "figure_05_gap_and_bound.png", dpi=170, bbox_inches="tight")
     plt.close(fig)
     return scale_hat, beta_hat

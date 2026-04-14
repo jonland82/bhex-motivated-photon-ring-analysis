@@ -154,7 +154,7 @@
     .metric .value { font-size: var(--fs-metric); font-weight: 750; margin-top: 6px; letter-spacing: -0.03em; }
     .metric .sub { color: var(--muted); font-size: var(--fs-xs); margin-top: 4px; }
     nav { position: sticky; top: 0; z-index: 4; backdrop-filter: blur(18px); background: rgba(9,15,26,0.74); border-bottom: 1px solid var(--line); }
-    nav .wrap { display: flex; gap: 18px; flex-wrap: wrap; padding-top: 14px; padding-bottom: 14px; scrollbar-width: thin; }
+    nav .wrap { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; padding-top: 14px; padding-bottom: 14px; }
     nav a { color: var(--muted); font-size: var(--fs-sm); }
     nav a:hover { color: var(--text); }
     section { padding: clamp(26px, 5vw, 34px) 0; }
@@ -280,8 +280,31 @@
       .prototype-layout { grid-template-columns: 1fr; gap: 18px; }
     }
     @media (max-width: 980px) {
-      nav .wrap { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      nav a { flex: 0 0 auto; }
+      nav {
+        position: static;
+        backdrop-filter: none;
+        background: transparent;
+        border-bottom: none;
+      }
+      nav .wrap {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+        padding-top: 12px;
+        padding-bottom: 8px;
+      }
+      nav a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 8px 10px;
+        text-align: center;
+        line-height: 1.2;
+        border: 1px solid rgba(255,255,255,0.10);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.05);
+      }
       .hero-grid, .two-col, .figure-grid-2, .figure-grid-3, .two-up, .workflow, .validation-detail-grid, .validation-figure-grid { grid-template-columns: 1fr; }
       .hero-links { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .hero-link-featured { grid-column: 1 / -1; }
@@ -310,7 +333,8 @@
       .hero-link-featured .hero-link-title { min-width: 0; }
       .metric-grid { grid-template-columns: 1fr; }
       .validation-stat-grid { grid-template-columns: 1fr; }
-      nav .wrap { gap: 14px; padding-top: 12px; padding-bottom: 12px; }
+      nav .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding-top: 10px; padding-bottom: 6px; }
+      nav a { min-height: 40px; font-size: var(--fs-xs); }
       .step { grid-template-columns: 24px 1fr; column-gap: 8px; }
       .step-num { width: 24px; height: 24px; }
       .equation-panel p.math-display { font-size: 0.94em; }
