@@ -15,7 +15,7 @@ The repository first turns that idea into a compact Fourier-domain prototype. It
 - the later mathematics gets its own dataset with the latent structure it actually needs
 - the repo remains reproducible end to end
 
-At a high level, the project now contains:
+At a high level, the project contains:
 
 - six short manuscript notes in [manuscript/](manuscript)
 - the main GitHub Pages landing page in [index.html](index.html)
@@ -51,7 +51,7 @@ The prototype estimator fits
 
 $$
 (\hat{\alpha}, \hat{\theta}, \hat{q})
-=
+\in
 \arg\min_{\alpha,\theta,q}
 \left\| y - \alpha g_{\theta} - q \right\|^2
 +
@@ -91,7 +91,7 @@ $$
 \frac{\alpha_1 c_{\max} e^{-\gamma N}}{1 - e^{-\gamma}}.
 $$
 
-The repository now reflects that mathematical arc directly: the first experiment implements the first equation set, while the second experiment instantiates the coherence and subring formulas in a separate synthetic benchmark.
+The repository reflects that mathematical arc directly: the first experiment implements the first equation set, while the second experiment instantiates the coherence and subring formulas in a separate synthetic benchmark.
 
 ## Repository map
 
@@ -287,7 +287,7 @@ The new validation suite is also intentionally scoped:
 - it instantiates the later coherence and subring inequalities directly
 - it is not a full ray-traced geodesic forward model
 
-So the repo now demonstrates two different things:
+So the repo demonstrates two different things:
 
 - the first-note structured estimator works in a clean toy setting
 - the later coherence and subring logic works in a purpose-built synthetic benchmark
@@ -310,6 +310,6 @@ The mathematical framing in this repo is motivated by the broader BHEX program. 
 
 ## Bottom line
 
-This repository is now best read as a two-stage executable argument.
+This repository is best read as a two-stage executable argument.
 
 The first stage shows, in a deliberately minimal Fourier-domain prototype, that ring-aware structured recovery can succeed after a direct visibility-amplitude heuristic becomes hard to interpret. The second stage shows, in a separate controlled benchmark, that the later geodesic-coherence and subring-resolved mathematics are not merely formal extensions: they produce measurable gains in recoverability, reconstruction quality, and finite-truncation behavior once the synthetic data actually contains the corresponding latent structure.
