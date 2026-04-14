@@ -5,6 +5,8 @@
 
 *Jonathan R. Landers, independent researcher. This project is inspired by published BHEX work and is not affiliated with the BHEX collaboration or mission team.*
 
+Black hole imaging moved from theory to observation with the Event Horizon Telescope's first horizon-scale image of M87* in 2019 and its Sagittarius A* image in 2022, showing that interferometric arrays can recover lensed structure near an event horizon. The proposed Black Hole Explorer (BHEX) mission pushes that program toward longer baselines and cleaner access to the thin photon ring, where understanding ring dynamics and their separation from broader, time-varying plasma emission matters because the ring is expected to carry more direct geometric information about the underlying spacetime.
+
 This repository studies one BHEX-motivated inverse problem in two deliberately separate steps.
 
 The physical picture is a thin photon ring sitting inside brighter, broader plasma emission. A simple long-baseline amplitude heuristic can become hard to read once plasma contamination distorts the visibility pattern. A structured estimator can still recover the ring if the ring remains distinguishable from the nuisance component.
