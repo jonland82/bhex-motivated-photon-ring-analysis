@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: coherence_gaps_subrings.aux
+Reallocating 'name_of_file' (item size: 1) to 9 items.
+The style file: plainnat.bst
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+Database file #1: coherence_gaps_subrings.bib
+You've used 21 entries,
+            2773 wiz_defined-function locations,
+            748 strings with 9901 characters,
+and the built_in function-call counts, 11962 in all, are:
+= -- 1027
+> -- 927
+< -- 9
++ -- 313
+- -- 291
+* -- 1097
+:= -- 1920
+add.period$ -- 81
+call.type$ -- 21
+change.case$ -- 159
+chr.to.int$ -- 20
+cite$ -- 42
+duplicate$ -- 448
+empty$ -- 796
+format.name$ -- 318
+if$ -- 2427
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 21
+newline$ -- 131
+num.names$ -- 84
+pop$ -- 275
+preamble$ -- 1
+purify$ -- 138
+quote$ -- 0
+skip$ -- 375
+stack$ -- 0
+substring$ -- 364
+swap$ -- 40
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 231
+warning$ -- 0
+while$ -- 88
+width$ -- 0
+write$ -- 313

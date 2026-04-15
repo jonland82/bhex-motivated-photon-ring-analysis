@@ -1,0 +1,173 @@
+\begin{thebibliography}{21}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Adler and {\"O}ktem(2018)]{Adler2018LPD}
+Jonas Adler and Ozan {\"O}ktem.
+\newblock Learned primal-dual reconstruction.
+\newblock \emph{IEEE Transactions on Medical Imaging}, 37\penalty0
+  (6):\penalty0 1322--1332, 2018.
+\newblock \doi{10.1109/TMI.2018.2799231}.
+
+\bibitem[Arridge et~al.(2019)Arridge, Maa{\ss}, {\"O}ktem, and
+  Sch{\"o}nlieb]{Arridge2019Survey}
+Simon Arridge, Peter Maa{\ss}, Ozan {\"O}ktem, and Carola-Bibiane
+  Sch{\"o}nlieb.
+\newblock Solving inverse problems using data-driven models.
+\newblock \emph{Acta Numerica}, 28:\penalty0 1--174, 2019.
+\newblock \doi{10.1017/S0962492919000059}.
+
+\bibitem[Cand{\`e}s(2008)]{Candes2008RIP}
+Emmanuel~J. Cand{\`e}s.
+\newblock The restricted isometry property and its implications for compressed
+  sensing.
+\newblock \emph{Comptes Rendus Math\'ematique}, 346\penalty0 (9--10):\penalty0
+  589--592, 2008.
+\newblock \doi{10.1016/j.crma.2008.03.014}.
+
+\bibitem[Cand{\`e}s et~al.(2006)Cand{\`e}s, Romberg, and Tao]{Candes2006Robust}
+Emmanuel~J. Cand{\`e}s, Justin~K. Romberg, and Terence Tao.
+\newblock Robust uncertainty principles: Exact signal reconstruction from
+  highly incomplete frequency information.
+\newblock \emph{IEEE Transactions on Information Theory}, 52\penalty0
+  (2):\penalty0 489--509, 2006.
+\newblock \doi{10.1109/TIT.2005.862083}.
+
+\bibitem[Chael et~al.(2018)Chael, Johnson, Bouman, Blackburn, Akiyama, and
+  Narayan]{Chael2018Closure}
+Andrew~A. Chael, Michael~D. Johnson, Katherine~L. Bouman, Lindy~L. Blackburn,
+  Kazunori Akiyama, and Ramesh Narayan.
+\newblock Interferometric imaging directly with closure phases and closure
+  amplitudes.
+\newblock \emph{Astrophysical Journal}, 857\penalty0 (1):\penalty0 23, 2018.
+\newblock \doi{10.3847/1538-4357/aab6a8}.
+
+\bibitem[Chan et~al.(2017)Chan, Wang, and Elgendy]{Chan2017PnP}
+Stanley~H. Chan, Xiran Wang, and Omar~A. Elgendy.
+\newblock Plug-and-play {ADMM} for image restoration: Fixed-point convergence
+  and applications.
+\newblock \emph{IEEE Transactions on Computational Imaging}, 3\penalty0
+  (1):\penalty0 84--98, 2017.
+\newblock \doi{10.1109/TCI.2016.2629286}.
+
+\bibitem[Donoho(2006)]{Donoho2006CS}
+David~L. Donoho.
+\newblock Compressed sensing.
+\newblock \emph{IEEE Transactions on Information Theory}, 52\penalty0
+  (4):\penalty0 1289--1306, 2006.
+\newblock \doi{10.1109/TIT.2006.871582}.
+
+\bibitem[{Event Horizon Telescope Collaboration}(2019)]{EHT2019M87}
+{Event Horizon Telescope Collaboration}.
+\newblock First {M87} event horizon telescope results. {I}. the shadow of the
+  supermassive black hole.
+\newblock \emph{Astrophysical Journal Letters}, 875:\penalty0 L1, 2019.
+\newblock \doi{10.3847/2041-8213/ab0ec7}.
+
+\bibitem[{Event Horizon Telescope Collaboration}(2022)]{EHT2022SgrA}
+{Event Horizon Telescope Collaboration}.
+\newblock First {Sagittarius A*} event horizon telescope results. {I}. the
+  shadow of the supermassive black hole in the center of the {Milky Way}.
+\newblock \emph{Astrophysical Journal Letters}, 930:\penalty0 L12, 2022.
+\newblock \doi{10.3847/2041-8213/ac6674}.
+
+\bibitem[Farah et~al.(2025)Farah, Lupsasca, Quataert, and
+  Johnson]{Farah2025Spin}
+Joseph~R. Farah, Alexandru Lupsasca, Eliot Quataert, and Michael~D. Johnson.
+\newblock Interferometric inference of black hole spin from photon ring size
+  and brightness.
+\newblock \emph{arXiv preprint arXiv:2509.23628}, 2025.
+
+\bibitem[Gralla and Lupsasca(2020{\natexlab{a}})]{Gralla2020Lensing}
+Samuel~E. Gralla and Alexandru Lupsasca.
+\newblock Lensing by kerr black holes.
+\newblock \emph{Physical Review D}, 101:\penalty0 044031, 2020{\natexlab{a}}.
+\newblock \doi{10.1103/PhysRevD.101.044031}.
+
+\bibitem[Gralla and Lupsasca(2020{\natexlab{b}})]{Gralla2020Ring}
+Samuel~E. Gralla and Alexandru Lupsasca.
+\newblock Null geodesics of the {Kerr} exterior.
+\newblock \emph{Physical Review D}, 101:\penalty0 044032, 2020{\natexlab{b}}.
+\newblock \doi{10.1103/PhysRevD.101.044032}.
+
+\bibitem[Gralla et~al.(2019)Gralla, Holz, and Wald]{Gralla2019Shadow}
+Samuel~E. Gralla, Daniel~E. Holz, and Robert~M. Wald.
+\newblock Black hole shadows, photon rings, and lensing rings.
+\newblock \emph{Physical Review D}, 100:\penalty0 024018, 2019.
+\newblock \doi{10.1103/PhysRevD.100.024018}.
+
+\bibitem[Hammernik et~al.(2018)Hammernik, Klatzer, Kobler, Recht, Sodickson,
+  Pock, and Knoll]{Hammernik2018VN}
+Kerstin Hammernik, Teresa Klatzer, Erich Kobler, Michael~P. Recht, Daniel~K.
+  Sodickson, Thomas Pock, and Florian Knoll.
+\newblock Learning a variational network for reconstruction of accelerated
+  {MRI} data.
+\newblock \emph{Magnetic Resonance in Medicine}, 79\penalty0 (6):\penalty0
+  3055--3071, 2018.
+\newblock \doi{10.1002/mrm.26977}.
+
+\bibitem[Johnson et~al.(2020)Johnson, Lupsasca, Strominger, Wong, Hadar, Kapec,
+  Narayan, Chael, Gammie, Galison, Palumbo, Doeleman, Blackburn, Wielgus,
+  Pesce, Farah, and Moran]{Johnson2020Universal}
+Michael~D. Johnson, Alexandru Lupsasca, Andrew Strominger, George~N. Wong,
+  Shahar Hadar, Daniel Kapec, Ramesh Narayan, Andrew Chael, Charles~F. Gammie,
+  Peter Galison, Daniel C.~M. Palumbo, Sheperd~S. Doeleman, Lindy Blackburn,
+  Maciek Wielgus, Dominic~W. Pesce, Joseph~R. Farah, and James~M. Moran.
+\newblock Universal interferometric signatures of a black hole's photon ring.
+\newblock \emph{Science Advances}, 6\penalty0 (12):\penalty0 eaaz1310, 2020.
+\newblock \doi{10.1126/sciadv.aaz1310}.
+
+\bibitem[Johnson et~al.(2024)Johnson, Akiyama, Baturin, Bilyeu, Blackburn,
+  Boroson, Cardenas-Avendano, Chael, Chan, Chang, et~al.]{Johnson2024Vision}
+Michael~D. Johnson, Kazunori Akiyama, Rebecca Baturin, Bryan Bilyeu, Lindy
+  Blackburn, Don Boroson, Alejandro Cardenas-Avendano, Andrew Chael, Chi-kwan
+  Chan, Dominic Chang, et~al.
+\newblock The black hole explorer: Motivation and vision.
+\newblock \emph{arXiv preprint arXiv:2406.12917}, 2024.
+
+\bibitem[Lupsasca et~al.(2024)Lupsasca, C{\'a}rdenas-Avenda{\~n}o, Palumbo,
+  Johnson, Gralla, Marrone, Galison, Tiede, and Keeble]{Lupsasca2024BHEX}
+Alexandru Lupsasca, Alejandro C{\'a}rdenas-Avenda{\~n}o, Daniel C.~M. Palumbo,
+  Michael~D. Johnson, Samuel~E. Gralla, Daniel~P. Marrone, Peter Galison, Paul
+  Tiede, and Lennox Keeble.
+\newblock The black hole explorer: Photon ring science, detection and shape
+  measurement.
+\newblock In \emph{Space Telescopes and Instrumentation 2024: Optical,
+  Infrared, and Millimeter Wave}, volume 13092, page 130926Q, 2024.
+\newblock \doi{10.1117/12.3019437}.
+
+\bibitem[Medeiros et~al.(2023)Medeiros, Psaltis, Lauer, and
+  Ozel]{Medeiros2023PRIMO}
+Lia Medeiros, Dimitrios Psaltis, Tod~R. Lauer, and Feryal Ozel.
+\newblock The image of the {M87} black hole reconstructed with {PRIMO}.
+\newblock \emph{Astrophysical Journal Letters}, 2023.
+\newblock \doi{10.3847/2041-8213/acc32d}.
+
+\bibitem[Ongie et~al.(2020)Ongie, Jalal, Metzler, Baraniuk, Dimakis, and
+  Willett]{Ongie2020Survey}
+Gregory Ongie, Ajil Jalal, Christopher~A. Metzler, Richard~G. Baraniuk,
+  Alexandros~G. Dimakis, and Rebecca Willett.
+\newblock Deep learning techniques for inverse problems in imaging.
+\newblock \emph{IEEE Journal on Selected Areas in Information Theory},
+  1\penalty0 (1):\penalty0 39--56, 2020.
+\newblock \doi{10.1109/JSAIT.2020.2991563}.
+
+\bibitem[Psaltis et~al.(2024)Psaltis, Ozel, Medeiros, and
+  Lauer]{Psaltis2024PRIMOTheory}
+Dimitrios Psaltis, Feryal Ozel, Lia Medeiros, and Tod~R. Lauer.
+\newblock Theoretical foundation of black hole image reconstruction using
+  {PRIMO}.
+\newblock \emph{arXiv preprint arXiv:2408.10322}, 2024.
+
+\bibitem[Tiede et~al.(2022)Tiede, Johnson, Broderick, Galison, Blackburn, and
+  Doeleman]{Tiede2022Photon}
+Paul Tiede, Michael~D. Johnson, Avery~E. Broderick, Peter Galison, Lindy
+  Blackburn, and Sheperd~S. Doeleman.
+\newblock Measuring photon ring autocorrelations.
+\newblock \emph{Astrophysical Journal}, 925:\penalty0 122, 2022.
+\newblock \doi{10.3847/1538-4357/ac3a51}.
+
+\end{thebibliography}
