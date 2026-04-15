@@ -102,6 +102,25 @@ def build_setup_figure() -> None:
     save_figure(fig, "fig_setup")
 
 
+def build_gap_cases_figure() -> None:
+    src_rel = benchmark_summary.get("figure_paths", {}).get("gap_cases")
+    src = SUITE_ROOT / src_rel if src_rel is not None else RESULTS_ROOT / "figures" / "figure_01_gap_cases.png"
+    image = plt.imread(src)
+
+    height, width = image.shape[:2]
+    fig_width = 7.1
+    fig_height = fig_width * height / max(width, 1)
+
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
+    ax.imshow(image)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    fig.subplots_adjust(left=0.0, right=1.0, bottom=0.0, top=1.0)
+    save_figure(fig, "fig_gap_cases")
+
+
 def build_gap_and_bound_figure() -> dict[str, float]:
     grouped = (
         holdout_meta.groupby("gap_true", as_index=False)["empirical_coherence_true"]
@@ -259,6 +278,7 @@ def build_error_coherence_figure() -> None:
 
 asset_summary = {}
 build_setup_figure()
+build_gap_cases_figure()
 asset_summary.update(build_gap_and_bound_figure())
 asset_summary.update(build_methods_and_truncation_figure())
 build_error_coherence_figure()

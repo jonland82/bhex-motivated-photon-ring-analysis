@@ -65,7 +65,7 @@ Jonathan R.\ Landers\\[2pt]
 \maketitle
 
 \begin{abstract}
-Photon-ring inference is a structured inverse problem where the target is a thin, geometrically informative signal embedded in broader plasma emission, blur, and noise. Direct amplitude readouts can fail before the ring is genuinely unrecoverable; the key question is which properties of the signal and nuisance classes govern that transition. This paper gives a geometric answer, working in a Fourier-domain visibility model where nuisance is constrained by geodesic provenance and the ring signal is decomposed into an exponentially weighted tower of winding-order subrings. The main theorem shows that when ring-generating and background-generating geodesic families separate in a criticality index by gap $\Delta$, the aggregate ring-background coherence decays exponentially in $\Delta$. A complementary proposition bounds the truncation error of this tower geometrically. Both results are validated on a dedicated synthetic benchmark with five controlled gap levels and four true subrings per image. On hold-out data, the subring bound upper-bounds empirical coherence on every sample, the designed gap and measured coherence are negatively correlated, and subring-structured estimators halve radius error relative to heuristic and monolithic baselines. The core message is that recoverability is governed not by visual legibility but by the geometry of the signal and nuisance classes and the gap between them---a principle that applies broadly to structured estimation problems with geometrically separated model classes.
+Photon-ring inference is a structured inverse problem where the target is a thin, geometrically informative signal embedded in broader plasma emission, blur, and noise. Direct amplitude readouts can fail before the ring is genuinely unrecoverable; the key question is which properties of the signal and nuisance classes govern that transition. This paper gives a geometric answer, working in a Fourier-domain visibility model where nuisance is constrained by geodesic provenance and the ring signal is decomposed into an exponentially weighted tower of winding-order subrings. Provenance restriction alone yields a monotonic improvement statement: narrowing nuisance to ordinary escaping geodesics cannot increase ring-background coherence. The main theorem then shows that when ring-generating and background-generating geodesic families separate in a criticality index by gap $\Delta$, the aggregate ring-background coherence decays exponentially in $\Delta$. A complementary proposition bounds the truncation error of this tower geometrically. Both results are validated on a dedicated synthetic benchmark with five controlled gap levels and four true subrings per image. On hold-out data, the subring bound upper-bounds empirical coherence on every sample, the designed gap and measured coherence are negatively correlated, and subring-structured estimators halve radius error relative to heuristic and monolithic baselines. The core message is that recoverability is governed not by visual legibility but by the geometry of the signal and nuisance classes and the gap between them---a principle that applies broadly to structured estimation problems with geometrically separated model classes.
 \end{abstract}
 
 \smallskip
@@ -82,7 +82,7 @@ Posed formally, the problem is a structured inverse problem with two model class
 The paper makes three contributions.
 \begin{itemize}
 \item It unifies a Fourier-domain mismatch framework with geodesic provenance constraints into a single aggregate subring model, replacing a monolithic ring template with a physically motivated exponential hierarchy while preserving the tractability of a low-dimensional estimator.
-\item It proves that if each subring-background operator pair decorrelates exponentially in a criticality gap $\Delta$, then the aggregate coherence of the full subring tower inherits the same gap-controlled decay.
+\item It shows that provenance restriction alone can only reduce, or at worst preserve, ring-background coherence, and proves that if each subring-background operator pair decorrelates exponentially in a criticality gap $\Delta$, then the aggregate coherence of the full subring tower inherits the same gap-controlled decay.
 \item It validates the theorem and the truncation bound on a synthetic benchmark designed specifically to instantiate provenance and subring structure, with five controlled gap levels, four true subrings per image, and a multi-component structured nuisance field.
 \end{itemize}
 
@@ -222,10 +222,27 @@ Applying the triangle inequality directly to \eqref{eq:aggregate-template} gives
 \end{equation}
 Equation \eqref{eq:weighted-bound} is purely algebraic, but it is already useful. It says that the overlap of the full ring tower with nuisance is controlled by subring-wise overlaps, weighted by the same exponential law that defines the signal.
 
+\begin{proposition}[Monotonicity under provenance restriction]
+\label{prop:prov-monotone}
+Let $Q_{\mathrm{prov}}\subseteq Q\subset \mathcal H \setminus \{0\}$ be nuisance families and let $g\in\mathcal H$ be nonzero. Then
+\begin{equation}
+\mu(g,Q_{\mathrm{prov}})
+\le
+\mu(g,Q).
+\label{eq:prov-monotone}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The claim is immediate from \eqref{eq:family-coherence}: the supremum defining $\mu(g,Q)$ is taken over a larger admissible set than the supremum defining $\mu(g,Q_{\mathrm{prov}})$.
+\end{proof}
+
+Proposition~\ref{prop:prov-monotone} is the first payoff of provenance. Before any quantitative separation assumption is imposed, narrowing nuisance to physically admissible escaping backgrounds can only improve, or at worst preserve, the coherence term that enters the mismatch bound \eqref{eq:mismatch}. The same monotonicity holds in the projection picture underlying \eqref{eq:mismatch}: if $\mathcal P_{\mathrm{prov}}\subseteq\mathcal P$ are closed nuisance subspaces, then $\norm{\Pi_{\mathcal P_{\mathrm{prov}}}g}\le \norm{\Pi_{\mathcal P}g}$. Provenance therefore helps twice: it narrows the admissible nuisance family before any geometric gap is imposed, and it creates the setting in which a stronger gap-dependent decay estimate can be asked for.
+
 \section{Gap-Controlled Coherence for Subring Towers}
 \label{sec:gap}
 
-The preceding setup becomes genuinely geometric once provenance separation is encoded by a criticality index. Let $\Delta \ge 0$ measure the separation between ring-generating and background-generating trajectories. The next theorem is the paper's main mathematical result.
+The preceding setup becomes genuinely geometric once provenance separation is encoded by a criticality index. Let $\Delta \ge 0$ measure the separation between ring-generating and background-generating trajectories. Proposition~\ref{prop:prov-monotone} says that provenance helps even before a quantitative separation law is available; the next step is to ask when that improvement is not merely monotone but explicitly exponential. The natural operator-level object is the cross operator $A_{b,\Delta}^{*}A_{r,n}$, which measures how strongly the $n$th subring family leaks into the gap-$\Delta$ background family after transport to visibility space. The theorem below shows that exponential decay of these cross operators forces the same decay for the aggregate coherence.
 
 \begin{theorem}[Gap-controlled coherence for aggregate subring templates]
 \label{thm:gap-bound}
@@ -297,7 +314,22 @@ Divide by $\norm{g_{\theta}^{(\gamma,N)}}\norm{q}$ and take the supremum over $q
 \end{proof}
 
 \begin{remark}
-Equation \eqref{eq:main-bound} is the paper's main bridge from phase-space geometry to statistical recoverability. Once nuisance is provenance-constrained, the mismatch term in \eqref{eq:mismatch} no longer depends on an abstract overlap parameter. Instead, it decays with the gap between ring-generating and background-generating families, modulated by subring weights and subring norms.
+Theorem~\ref{thm:gap-bound} has a simple operator-level interpretation. For one subring and one nuisance realization $q=A_{b,\Delta}h$, assumption (i) implies
+\[
+\frac{\abs{\inner{g_{\theta,n}}{q}}}{\norm{g_{\theta,n}}\norm{q}}
+\le
+\frac{\norm{A_{b,\Delta}^{*}A_{r,n}}}{\sigma_r\sigma_b}.
+\]
+Thus assumption (ii) is precisely a decorrelation hypothesis on the cross operator $A_{b,\Delta}^{*}A_{r,n}$. If $A_{r,n}$ and $A_{b,\Delta}$ admit visibility kernels, one standard route to such a hypothesis is the Hilbert--Schmidt estimate
+\[
+\norm{A_{b,\Delta}^{*}A_{r,n}}
+\le
+\left(
+\int_{E_n}\!\int_{E_{\mathrm{bg}}}
+\abs{G_{n,\Delta}(z,z')}^2\,d\nu(z)\,d\nu(z')
+\right)^{1/2},
+\]
+where $G_{n,\Delta}$ is the corresponding gap-dependent cross-Gram kernel. Equation \eqref{eq:main-bound} is therefore the paper's main bridge from phase-space geometry to statistical recoverability: once nuisance is provenance-constrained, the mismatch term in \eqref{eq:mismatch} no longer depends on an abstract overlap parameter. Instead, it decays with the gap between ring-generating and background-generating families, modulated by subring weights and subring norms.
 \end{remark}
 
 \begin{corollary}[Mismatch bound for the aggregate subring template]
@@ -414,7 +446,18 @@ Four-subring model & 0.433 & 0.378--0.505 & 0.231 & 0.243 \\
 \label{tab:main-results}
 \end{table}
 
-Measured against the monolithic structured model, the two-subring model reduces hold-out radius MAE by $49.1\%$, while the four-subring model reduces it by $48.1\%$. Relative to the amplitude heuristic, the reductions are $51.9\%$ and $51.0\%$, respectively. Those improvements are too large to be read as marginal tuning effects; they indicate that the added signal structure is carrying information that a single ring template leaves unused.
+Measured against the monolithic structured model, the two-subring model reduces hold-out radius MAE by $49.1\%$, while the four-subring model reduces it by $48.1\%$. Relative to the amplitude heuristic, the reductions are $51.9\%$ and $51.0\%$, respectively. On morphology, the four-subring model reduces mean relative ring MSE by $59.1\%$ relative to the monolithic model, while the two-subring model reduces it by $29.0\%$, making the geometry-versus-morphology tradeoff quantitatively explicit rather than anecdotal. Those improvements are too large to be read as marginal tuning effects; they indicate that the added signal structure is carrying information that a single ring template leaves unused.
+
+\subsection{Representative gap regimes}
+
+Figure~\ref{fig:gap-cases} provides a qualitative cross-section of the benchmark at three designed gap levels. As the nuisance changes from relatively ring-adjacent leakage to broader, more clearly separated contamination, the observed image can become increasingly background-dominated even though the true aggregate ring remains thin and stable. The rightmost column shows that the four-subring model still recovers the correct geometry across this range, which is the qualitative counterpart of the quantitative gap and coherence trends below.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_gap_cases.pdf}
+\caption{Representative hold-out cases across low-, mid-, and high-gap regimes. Each row shows the composite observation, the true aggregate ring, the true background, and the four-subring estimate. The designed gap changes how ring-adjacent the nuisance field is, while the subring-structured estimator retains the correct ring geometry across the range.}
+\label{fig:gap-cases}
+\end{figure}
 
 \subsection{Gap-controlled coherence appears in the data}
 
