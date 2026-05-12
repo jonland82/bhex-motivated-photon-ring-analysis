@@ -1,7 +1,8 @@
 # BHEX-Motivated Photon Ring Analysis
 
-[Live site](https://jonland82.github.io/bhex-motivated-photon-ring-analysis/)  
-[Standalone coherence + subring report](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html)
+- [Live site](https://jonland82.github.io/bhex-motivated-photon-ring-analysis/)
+- [Consolidated arXiv-style PDF](manuscript/arxiv/coherence_gaps_subrings.pdf)
+- [Standalone coherence + subring report](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html)
 
 *Jonathan R. Landers, independent researcher. This project is inspired by published BHEX work and is not affiliated with the BHEX collaboration or mission team.*
 
@@ -19,7 +20,7 @@ The repository first turns that idea into a compact Fourier-domain prototype. It
 
 At a high level, the project contains:
 
-- six short manuscript notes in [manuscript/](manuscript)
+- six short manuscript notes plus a consolidated arXiv-style paper in [manuscript/](manuscript)
 - the main GitHub Pages landing page in [index.html](index.html)
 - the original runnable prototype in [simulation/](simulation)
 - a separate coherence + subring validation suite in [coherence_subring_validation/](coherence_subring_validation)
@@ -99,6 +100,8 @@ The repository reflects that mathematical arc directly: the first experiment imp
 
 - [index.html](index.html)
   - the main project narrative and landing page for GitHub Pages
+- [manuscript/arxiv/coherence_gaps_subrings.pdf](manuscript/arxiv/coherence_gaps_subrings.pdf)
+  - consolidated arXiv-style paper tying together provenance, coherence gaps, subrings, and the validation suite
 - [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf)
   - the original Fourier-domain mismatch and recoverability note
 - [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf)
@@ -157,11 +160,11 @@ With the current defaults, the baseline experiment uses:
 - image size `256 x 256`
 - a circular thin-ring signal plus broader crescent-like plasma, blur, noise, and small center jitter
 
-It writes results to:
+It writes reproducible raw data and tracked summaries to:
 
-- [bhex_synthetic_dataset/](bhex_synthetic_dataset)
-- [bhex_model_tuning/](bhex_model_tuning)
-- [bhex_holdout_results/](bhex_holdout_results)
+- `bhex_synthetic_dataset/` for regenerated raw synthetic data, ignored by git
+- [bhex_model_tuning/](bhex_model_tuning) for tracked tuning summaries and plots
+- [bhex_holdout_results/](bhex_holdout_results) for tracked held-out summaries and diagnostic plots
 
 Current default baseline results:
 
@@ -205,9 +208,9 @@ With the current defaults, the second suite uses:
 - designed gap levels `0.45, 0.85, 1.25, 1.65, 2.05`
 - a nuisance field built from a broad crescent, a gap-controlled near-critical shell, and diffuse blobs
 
-It writes results to:
+It writes reproducible raw data and tracked report outputs to:
 
-- [coherence_subring_validation/coherence_subring_dataset/](coherence_subring_validation/coherence_subring_dataset)
+- `coherence_subring_validation/coherence_subring_dataset/` for regenerated raw validation data, ignored by git
 - [coherence_subring_validation/coherence_subring_results/](coherence_subring_validation/coherence_subring_results)
 - [coherence_subring_validation/coherence_subring_results/coherence_subring_report.html](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html)
 
@@ -257,12 +260,10 @@ That separation keeps the narrative honest and the experiments reproducible.
 
 If you want the shortest path through the repo:
 
-1. Start with [index.html](index.html).
-2. Read [manuscript/fourier-domain-analysis-bhex.pdf](manuscript/fourier-domain-analysis-bhex.pdf).
-3. Inspect the baseline scripts in [simulation/](simulation).
-4. Read [manuscript/geodesic_provenance_bhex_note.pdf](manuscript/geodesic_provenance_bhex_note.pdf) and [manuscript/geodesic_coherence_bhex_note.pdf](manuscript/geodesic_coherence_bhex_note.pdf).
-5. Read [manuscript/subring_resolved_bhex_note.pdf](manuscript/subring_resolved_bhex_note.pdf) and [manuscript/subring_refinement_summary_note.pdf](manuscript/subring_refinement_summary_note.pdf).
-6. Open the generated [coherence_subring_report.html](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html).
+1. Read the consolidated [arXiv-style PDF](manuscript/arxiv/coherence_gaps_subrings.pdf).
+2. Open [index.html](index.html) for the interactive project narrative.
+3. Open the generated [coherence_subring_report.html](coherence_subring_validation/coherence_subring_results/coherence_subring_report.html).
+4. Use the individual notes in [manuscript/](manuscript) for the derivation history.
 
 If you want the runnable story in output form after executing the scripts:
 
