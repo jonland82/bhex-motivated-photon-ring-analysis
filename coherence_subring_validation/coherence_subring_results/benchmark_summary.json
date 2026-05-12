@@ -1,0 +1,69 @@
+{
+  "tuned_lambdas": {
+    "Monolithic ring model": 4.0,
+    "Two-subring model": 10.0,
+    "Four-subring model": 10.0
+  },
+  "holdout_metrics": [
+    {
+      "method": "Two-subring model",
+      "n_holdout": 60,
+      "radius_mae": 0.4243074165869345,
+      "radius_mae_ci_lo": 0.36038326888713573,
+      "radius_mae_ci_hi": 0.496221424131551,
+      "radius_median_abs_error": 0.34910694403649956,
+      "ring_rel_mse_mean": 0.4004289130728495,
+      "gamma_mae": 0.2423017549219259
+    },
+    {
+      "method": "Four-subring model",
+      "n_holdout": 60,
+      "radius_mae": 0.4328371604812707,
+      "radius_mae_ci_lo": 0.3775283524474566,
+      "radius_mae_ci_hi": 0.505074259222699,
+      "radius_median_abs_error": 0.4053078124277576,
+      "ring_rel_mse_mean": 0.231008339216155,
+      "gamma_mae": 0.24312342251534824
+    },
+    {
+      "method": "Monolithic ring model",
+      "n_holdout": 60,
+      "radius_mae": 0.8332031935139054,
+      "radius_mae_ci_lo": 0.7165033605188859,
+      "radius_mae_ci_hi": 0.9592741958100056,
+      "radius_median_abs_error": 0.6311802191583027,
+      "ring_rel_mse_mean": 0.5642253792251777,
+      "gamma_mae": NaN
+    },
+    {
+      "method": "Amplitude heuristic",
+      "n_holdout": 60,
+      "radius_mae": 0.8832031935139054,
+      "radius_mae_ci_lo": 0.7922765764871097,
+      "radius_mae_ci_hi": 0.9562194759841885,
+      "radius_median_abs_error": 0.9283237556830386,
+      "ring_rel_mse_mean": NaN,
+      "gamma_mae": NaN
+    }
+  ],
+  "coherence_gap_fit": {
+    "scale_hat": 0.6261878165559371,
+    "beta_hat": 0.14883064076312677
+  },
+  "bound_coverage_fraction": 1.0,
+  "improvement_monolithic_to_four_subring_pct": 48.05142804891961,
+  "representative_gap_cases": [
+    "holdout_0157",
+    "holdout_0151",
+    "holdout_0165"
+  ],
+  "representative_subring_case": "holdout_0175",
+  "figure_paths": {
+    "gap_cases": "coherence_subring_results\\figures\\figure_01_gap_cases.png",
+    "subring_tower": "coherence_subring_results\\figures\\figure_02_subring_tower.png",
+    "method_comparison": "coherence_subring_results\\figures\\figure_03_method_comparison.png",
+    "error_vs_coherence": "coherence_subring_results\\figures\\figure_04_error_vs_coherence.png",
+    "gap_and_bound": "coherence_subring_results\\figures\\figure_05_gap_and_bound.png",
+    "truncation_curve": "coherence_subring_results\\figures\\figure_06_truncation_curve.png"
+  }
+}

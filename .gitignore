@@ -1,0 +1,47 @@
+# Local tool settings
+.claude/settings.local.json
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Matplotlib cache/config generated during runs
+.mplconfig/
+
+# Generated synthetic datasets are reproducible and too large for the repo.
+/bhex_synthetic_dataset/
+/simulation/bhex_synthetic_dataset/
+
+# Duplicate simulation outputs created when running scripts from simulation/.
+/simulation/bhex_model_tuning/
+/simulation/bhex_holdout_results/
+
+# Raw estimator arrays are reproducible intermediates.
+/bhex_holdout_results/*.npy
+
+# Generated coherence validation input data
+/coherence_subring_validation/coherence_subring_dataset/
+/coherence_subring_validation/coherence_subring_results/report_*.png
+
+# LaTeX build byproducts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini

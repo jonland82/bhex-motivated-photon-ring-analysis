@@ -1,0 +1,12 @@
+{
+  "data_root": "C:\\bhex-motivated-photon-ring-analysis\\bhex_synthetic_dataset",
+  "image_size_original": 256,
+  "image_size_working": 64,
+  "downsample_factor": 4,
+  "radius_search_min_original": 34.0,
+  "radius_search_max_original": 82.0,
+  "radius_step_original": 1.0,
+  "lambda": 63.09573444801933,
+  "template_width_original": 4.0,
+  "penalty_power": 2.0
+}
